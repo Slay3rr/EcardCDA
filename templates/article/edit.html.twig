@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ form.vars.value.id ? 'Edit Article' : 'New Article' }}{% endblock %}
+
+{% block body %}
+<h1>{{ form.vars.value.id ? 'Edit Article' : 'Create Article' }}</h1>
+
+{{ form_start(form) }}
+    <div class="form-group">
+        {{ form_label(form.Titre) }}
+        {{ form_widget(form.Titre, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+    <div class="form-group mt-3">
+        {{ form_label(form.content) }}
+        {{ form_widget(form.content, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+    <div class="form-group mt-3">
+        {{ form_label(form.Category) }}
+        {{ form_widget(form.Category, { 'attr': {'class': 'form-control'} }) }}
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">{{ form.vars.value.id ? 'Update' : 'Create' }}</button>
+{{ form_end(form) }}
+
+<a href="{{ path('admin_article_index') }}">Back to list</a>
+{% endblock %}

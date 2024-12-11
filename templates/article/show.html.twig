@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Article Details{% endblock %}
+
+{% block body %}
+<h1>{{ article.Titre }}</h1>
+<p>{{ article.content }}</p>
+
+<h3>Catégories</h3>
+<ul>
+    {% for category in article.Category %}
+        <li>{{ category.name }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('admin_article_index') }}">Retour à la liste</a>
+<a href="{{ path('admin_article_edit', {id: article.id}) }}">Modifier</a>
+<form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" onsubmit="return confirm('Are you sure?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+    <button class="btn btn-danger">Supprimer</button>
+</form>
+{% endblock %}
