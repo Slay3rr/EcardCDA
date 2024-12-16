@@ -1,0 +1,14 @@
+nelmio_cors:
+  defaults:
+    allow_origin: ['http://localhost:4200'] # Origine autorisée (votre frontend Angular)
+    allow_methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'] # Méthodes HTTP autorisées
+    allow_headers: ['Content-Type', 'Authorization'] # En-têtes autorisés
+    expose_headers: ['Authorization'] # En-têtes exposés dans les réponses
+    max_age: 3600
+    hosts: []
+  paths:
+    '^/api/': # Toutes les routes API sous "/api/"
+      allow_origin: ['http://localhost:4200']
+      allow_methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE']
+      allow_headers: ['Content-Type', 'Authorization']
+      max_age: 3600

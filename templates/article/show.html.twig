@@ -12,11 +12,22 @@
         <li>{{ category.name }}</li>
     {% endfor %}
 </ul>
+<p><strong>Price: </strong>{{ article.price }} €</p>
 
-<a href="{{ path('admin_article_index') }}">Retour à la liste</a>
-<a href="{{ path('admin_article_edit', {id: article.id}) }}">Modifier</a>
-<form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" onsubmit="return confirm('Are you sure?');">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-    <button class="btn btn-danger">Supprimer</button>
-</form>
+<!-- Bouton Ajouter au panier pour les utilisateurs -->
+<a href="{{ path('cart_add', {id: article.id}) }}" class="btn btn-primary">
+    Ajouter au panier
+</a>
+
+<!-- Retour à la liste des articles -->
+<a href="{{ path('admin_article_index') }}" class="btn btn-secondary mt-3">Retour à la liste</a>
+
+{% if is_granted('ROLE_ADMIN') %}
+    <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-warning">Modifier</a>
+    <form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" onsubmit="return confirm('Are you sure?');">
+        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+        <button class="btn btn-danger">Supprimer</button>
+    </form>
+{% endif %}
+
 {% endblock %}

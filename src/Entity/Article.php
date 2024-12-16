@@ -21,11 +21,15 @@ class Article
     #[ORM\Column(length: 255)]
     private ?string $content = null;
 
+
     /**
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'articles')]
     private Collection $Category;
+
+    #[ORM\Column]
+    private ?float $price = null;
 
     public function __construct()
     {
@@ -68,6 +72,20 @@ class Article
     {
         return $this->Category;
     }
+    
+    // Getter et Setter pour 'price'
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
 
 
     public function addCategory(Category $category): static

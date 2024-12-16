@@ -84,4 +84,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface // La cl
     {
         return $this->email; // Retourne l'email de l'utilisateur comme identifiant unique
     }
+
+    // src/Entity/User.php
+#[ORM\OneToOne(mappedBy: 'user', targetEntity: Cart::class, cascade: ['persist', 'remove'])]
+private ?Cart $cart = null;
+
+public function getCart(): ?Cart
+{
+    return $this->cart;
+}
+
+public function setCart(?Cart $cart): self
+{
+    // Set the owning side of the relation if necessary
+    if ($cart->getUser() !== $this) {
+        $cart->setUser($this);
+    }
+
+    $this->cart = $cart;
+
+    return $this;
+}
+
+
 }

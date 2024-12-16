@@ -18,19 +18,19 @@ class ArticleRepository extends ServiceEntityRepository
     }
 
        /**
-        * @return Article[] Returns an array of Article objects
+        * @param Category $category
+        * @return Article[]
         */
-       public function findByExampleField($value): array
-       {
-           return $this->createQueryBuilder('a')
-               ->andWhere('a.exampleField = :val')
-               ->setParameter('val', $value)
-               ->orderBy('a.id', 'ASC')
-               ->setMaxResults(10)
-               ->getQuery()
-               ->getResult()
-           ;
-       }
+        public function findByCategory(Category $category): array
+        {
+            return $this->createQueryBuilder('a')
+                ->innerJoin('a.Category', 'c')
+                ->andWhere('c.id = :categoryId')
+                ->setParameter('categoryId', $category->getId())
+                ->orderBy('a.id', 'DESC')
+                ->getQuery()
+                ->getResult();
+        }
 
     //    public function findOneBySomeField($value): ?Article
     //    {

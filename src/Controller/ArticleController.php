@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Doctrine\ORM\EntityManagerInterface; // On importe EntityManagerInterface qui est utilisé pour interagir avec la base de données
 use Symfony\Component\HttpFoundation\Response;
@@ -12,7 +13,7 @@ use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 
@@ -21,11 +22,14 @@ class ArticleController extends AbstractController
 {
     // Liste des articles publics (accessible à tous)
     #[Route('/articles', name: 'public_articles', methods: ['GET'])]
-    public function publicIndex(ArticleRepository $articleRepository): Response
+    public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
         $articles = $articleRepository->findBy([], ['id' => 'DESC']);
+        $categories = $categoryRepository->findAll(); // Récupération des catégories
+
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findBy([], ['id' => 'DESC']),
+            'articles' => $articles,
+            'categories' => $categories, // Transmet les catégories à la vue
         ]);
     }
 
@@ -46,14 +50,19 @@ class ArticleController extends AbstractController
         
         $article = new Article();
         $form = $this->createFormBuilder($article)
-            ->add('Titre', TextType::class)
-            ->add('content', TextareaType::class)
-            ->add('Category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => false,
-            ])
+        ->add('Titre', TextType::class)
+        ->add('content', TextareaType::class)
+        ->add('price', NumberType::class, [
+            'label' => 'Prix',
+            'scale' => 2, // Pour avoir un prix avec 2 décimales
+            'attr' => ['step' => '0.01', 'min' => '0'],
+        ])
+        ->add('Category', EntityType::class, [
+            'class' => Category::class,
+            'choice_label' => 'name',
+            'multiple' => true,
+            'expanded' => false,
+        ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -71,12 +80,16 @@ class ArticleController extends AbstractController
 
     // Route pour l'affichage des articles admins
     #[Route('/admin/article', name: 'admin_article_index', methods: ['GET'])]
-    public function adminIndex(ArticleRepository $articleRepository): Response
+    public function adminIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
+
+        $articles = $articleRepository->findAll();
+        $categories = $categoryRepository->findAll(); // Récupération des catégories
+
         return $this->render('article/index.html.twig', [
-            'articles' => $articleRepository->findAll(),
+            'articles' => $articles,
+            'categories' => $categories, // Transmet les catégories à la vue
         ]);
     }
 
@@ -98,14 +111,19 @@ class ArticleController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         
         $form = $this->createFormBuilder($article)
-            ->add('Titre', TextType::class)
-            ->add('content', TextareaType::class)
-            ->add('Category', EntityType::class, [
-                'class' => Category::class,
-                'choice_label' => 'name',
-                'multiple' => true,
-                'expanded' => false,
-            ])
+        ->add('Titre', TextType::class)
+        ->add('content', TextareaType::class)
+        ->add('price', NumberType::class, [
+            'label' => 'Prix',
+            'scale' => 2, // Pour avoir un prix avec 2 décimales
+            'attr' => ['step' => '0.01', 'min' => '0'],
+        ])
+        ->add('Category', EntityType::class, [
+            'class' => Category::class,
+            'choice_label' => 'name',
+            'multiple' => true,
+            'expanded' => false,
+        ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -132,4 +150,46 @@ class ArticleController extends AbstractController
 
         return $this->redirectToRoute('admin_article_index');
     }
+
+    #[Route('/articles/category', name: 'articles_by_category', methods: ['GET'])]
+    public function articlesByCategorySearch(Request $request, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
+    {
+        $categoryId = $request->query->get('id'); // Récupère l'ID depuis le formulaire.
+
+        if ($categoryId) {
+            $category = $categoryRepository->find($categoryId);
+            if (!$category) {
+                throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
+            }
+
+            $articles = $category->getArticles(); // Récupérer les articles liés à cette catégorie.
+        } else {
+            // Si aucune catégorie n'est sélectionnée, afficher tous les articles.
+            $articles = $articleRepository->findAll();
+        }
+
+        return $this->render('article/index.html.twig', [
+            'articles' => $articles,
+            'categories' => $categoryRepository->findAll(), // Pour le menu de catégorie
+        ]);
+    }
+
+    #[Route('/articles/category/{id}', name: 'articles_by_category', methods: ['GET'])]
+    public function articlesByCategory(int $id, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
+    {
+        $category = $categoryRepository->find($id);
+
+        if (!$category) {
+            throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
+        }
+
+        $articles = $category->getArticles(); // Récupérer les articles liés à cette catégorie.
+
+        return $this->render('article/index.html.twig', [
+            'articles' => $articles,
+            'categories' => $categoryRepository->findAll(), // Pour le menu.
+            'currentCategory' => $category, // Pour identifier la catégorie active.
+        ]);
+    }
+
 }
