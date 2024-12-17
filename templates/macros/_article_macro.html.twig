@@ -1,0 +1,26 @@
+{% macro displayArticle(article) %}
+    <div class="product-card" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin: 15px 0; width: 300px; text-align: center;">
+        
+        
+        
+        <!-- Titre du produit -->
+        <h2 style="font-size: 1.5rem; color: #333; margin-bottom: 10px;">{{ article.Titre }}</h2>
+
+        <!-- Description courte du produit -->
+        <p style="font-size: 1rem; color: #666; margin-bottom: 15px; height: 60px; overflow: hidden; text-overflow: ellipsis;">
+            {{ article.content }}
+        </p>
+
+        <!-- Prix -->
+        {% if article.price is not null %}
+            <p style="font-size: 1.2rem; color: #e74c3c; font-weight: bold; margin-bottom: 20px;">
+                {{ article.price }} €
+            </p>
+        {% endif %}
+
+        <!-- Bouton d'ajout au panier -->
+        <a href="{{ path('cart_add', { 'id': article.id }) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            Ajouter au panier
+        </a>
+    </div>
+{% endmacro %}
