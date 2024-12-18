@@ -1,8 +1,6 @@
 {% macro displayArticle(article) %}
     <div class="product-card" style="border: 1px solid #ccc; padding: 15px; border-radius: 8px; margin: 15px 0; width: 300px; text-align: center;">
         
-        
-        
         <!-- Titre du produit -->
         <h2 style="font-size: 1.5rem; color: #333; margin-bottom: 10px;">{{ article.Titre }}</h2>
 
@@ -18,9 +16,50 @@
             </p>
         {% endif %}
 
-        <!-- Bouton d'ajout au panier -->
-        <a href="{{ path('cart_add', { 'id': article.id }) }}" style="display: inline-block; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-weight: bold;">
-            Ajouter au panier
-        </a>
+        <!-- Bouton pour ajouter une offre (pour les utilisateurs uniquement) -->
+        {% if is_granted('ROLE_USER') %}
+            <a href="{{ path('add_offer', { 'id': article.id }) }}" style="display: inline-block; padding: 10px 20px; background-color: #f39c12; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px;">
+                Ajouter une offre
+            </a>
+        {% endif %}
+
+        <!-- Offres disponibles -->
+        {% if article.offres|length > 0 %}
+            <h3 style="font-size: 1.2rem; color: #555; margin-top: 20px;">Offres disponibles</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px;">
+                <thead>
+                    <tr style="background-color: #f4f4f4; text-align: left;">
+                        <th style="padding: 8px; border: 1px solid #ddd;">Vendeur</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Prix</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Quantité</th>
+                        <th style="padding: 8px; border: 1px solid #ddd;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for offre in article.offres %}
+                        <tr>
+                            <td style="padding: 8px; border: 1px solid #ddd;">{{ offre.user.email }}</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">{{ offre.price }} €</td>
+                            <td style="padding: 8px; border: 1px solid #ddd;">{{ offre.quantity }}</td>
+                            <td>
+                                {% if app.user == offre.user %}
+                                    <a href="{{ path('offer_edit', {id: offre.id}) }}" class="btn btn-warning btn-sm">
+                                        Modifier
+                                    </a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('cart_add', {id: offre.id}) }}" style="padding: 5px 10px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+                                    Ajouter au panier
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p style="color: #888; font-size: 1rem; margin-top: 15px;">Aucune offre disponible pour cet article.</p>
+        {% endif %}
     </div>
+    <a href="{{ path('admin_article_index') }}">Retour à la liste</a>
 {% endmacro %}

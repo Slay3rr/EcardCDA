@@ -4,7 +4,4 @@
     {{ article_macro.displayArticle(article) }}
 
     <a href="{{ path('admin_article_index') }}">Retour à la liste</a>
-<a href="{{ path('cart_add', {id: article.id}) }}" class="btn btn-primary">
-    Ajouter au panier
-</a>
 {% endblock %}

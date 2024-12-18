@@ -1,40 +1,50 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Votre Panier{% endblock %}
 
 {% block body %}
 <h1>Votre Panier</h1>
 
-<table>
-    <thead>
-        <tr>
-            <th>Article</th>
-            <th>Prix</th>
-            <th>Quantité</th>
-            <th>Total</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cart %}
+{% if cart|length > 0 %}
+    <table class="table">
+        <thead>
             <tr>
-                <td>{{ item.article.Titre }}</td>
-                <td>{{ item.article.price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.article.price * item.quantity }}</td>
-                <td>
-                    <a href="{{ path('cart_update', {id: item.article.id, quantity: item.quantity + 1}) }}">+</a>
-                    <a href="{{ path('cart_update', {id: item.article.id, quantity: item.quantity - 1}) }}">-</a>
-                    <a href="{{ path('cart_remove', {id: item.article.id}) }}">Supprimer</a>
-                </td>
+                <th>Nom de l'article</th>
+                <th>Vendeur</th>
+                <th>Prix unitaire</th>
+                <th>Quantité</th>
+                <th>Total</th>
+                <th>Actions</th>
             </tr>
-        {% endfor %}
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+{% for item in cart %}
+    <tr>
+        <td>{{ item.offer.article.Titre }}</td>
+        <td>{{ item.offer.user.email }}</td>
+        <td>{{ item.offer.getPrice }} €</td>
+        <td>
+            <form method="post" action="{{ path('cart_update', {id: item.offer.id}) }}" style="display: inline;">
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.quantity + item.offer.getQuantity }}" class="form-control-sm" style="width: 60px; display: inline-block;">
+                <button type="submit" class="btn btn-primary btn-sm">Modifier</button>
+            </form>
+        </td>
+        <td>{{ item.offer.getPrice * item.quantity }} €</td>
+        <td>
+            <a href="{{ path('cart_remove', {id: item.offer.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
+        </td>
+    </tr>
+{% endfor %}
+            
+        </tbody>
+    </table>
+    <h3>Total : {{ total }} €</h3>
+{% else %}
+    <p>Votre panier est vide.</p>
+{% endif %}
 
-<h2>Total : {{ total }}</h2>
 
-<a href="{{ path('public_articles') }}" class="btn btn-secondary">Revenir aux achats</a>
+<a href="{{ path('public_articles') }}" class="btn btn-secondary mt-3">Retour aux articles</a>
+<a href="{{ path('cart_clear') }}" class="btn btn-warning mt-3">Vider le panier</a>
 
 {% endblock %}
-

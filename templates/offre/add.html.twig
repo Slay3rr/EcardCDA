@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une offre{% endblock %}
+
+{% block body %}
+<h1>Ajouter une offre pour "{{ article.Titre }}"</h1>
+
+{{ form_start(form) }}
+    {{ form_row(form.price, { 'attr': {'class': 'form-control'} }) }}
+    {{ form_row(form.quantity, { 'attr': {'class': 'form-control'} }) }}
+    <button type="submit" class="btn btn-success mt-3">Ajouter l'offre</button>
+{{ form_end(form) }}
+
+<a href="{{ path('public_article_show', {id: article.id}) }}" class="btn btn-secondary mt-3">Retour</a>
+{% endblock %}
