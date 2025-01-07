@@ -30,9 +30,6 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/logout', name: 'app_logout')]
-    public function logout(): void {}
-
     #[Route(path: '/api/login', name: 'api_login', methods: ['GET', 'POST'])]
     public function adminlogin(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $jwtManager): JsonResponse
     {
@@ -52,4 +49,9 @@ class SecurityController extends AbstractController
         $token = $jwtManager->create($user);
         return $this->json(['token' => $token]);
     }
+    #[Route('/logout', name: 'app_logout', methods: ['GET'])]
+    public function logout(): void
+    {
+        throw new \Exception('This method can be blank - it will be intercepted by the logout key on your firewall');
+    } 
 }

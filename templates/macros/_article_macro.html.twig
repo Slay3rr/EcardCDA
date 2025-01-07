@@ -32,24 +32,54 @@
                     <th style="padding: 12px; border: 1px solid #ddd;">Vendeur</th>
                     <th style="padding: 12px; border: 1px solid #ddd;">Prix</th>
                     <th style="padding: 12px; border: 1px solid #ddd;">Quantité</th>
+                    <th style="padding: 12px; border: 1px solid #ddd;">Description</th>
                     <th style="padding: 12px; border: 1px solid #ddd;">Action</th>
                 </tr>
             </thead>
             <tbody>
                 {% for offre in article.offres %}
+                    {% if offre.quantity > 0 %}
                     <tr>
                         <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.user.email }}</td>
                         <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.price }} €</td>
                         <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.quantity }}</td>
+                        <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.description }}</td>
                         <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
-                            <form action="{{ path('cart_add', {id: offre.id}) }}" method="get" style="display: flex; align-items: center;">
-                                <input type="number" name="quantity" value="1" min="1" max="{{ offre.quantity }}" style="width: 60px; margin-right: 10px;" required>
-                                <button type="submit" style="padding: 8px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; border: none;">
-                                    Ajouter
-                                </button>
-                            </form>
+                            {% if app.user == offre.user %}
+                                <!-- Boutons pour le propriétaire de l'offre -->
+                                <a href="{{ path('offer_edit', { id: offre.id }) }}" class="btn btn-warning btn-sm" style="margin-bottom: 5px; display: block;">
+                                    Modifier
+                                </a>
+                                <form action="{{ path('offer_delete', { id: offre.id }) }}" method="post" style="display: inline-block; margin-top: 5px;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+                                        Supprimer
+                                    </button>
+                                </form>
+                            {% elseif is_granted('ROLE_ADMIN') %}
+                                <!-- Bouton de suppression pour l'administrateur -->
+                                <form action="{{ path('admin_offer_delete', { id: offre.id }) }}" method="post" style="display:inline-block;">
+                                    <input type="hidden" name="_method" value="DELETE">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
+                                        Supprimer l'offre
+                                    </button>
+                                </form>
+                            {% else %}
+                                <!-- Bouton pour ajouter au panier -->
+                                <form action="{{ path('cart_add', { id: offre.id }) }}" method="get" style="display: flex; align-items: center;">
+                                    <input type="number" name="quantity" value="1" min="1" max="{{ offre.quantity }}" style="width: 60px; margin-right: 10px;" required>
+                                    <button type="submit" style="padding: 8px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; border: none;">
+                                    {% if is_granted('ROLE_USER') %}
+                                        Ajouter au panier
+                                    {% else %}
+                                        Connectez-vous pour ajouter au panier
+                                    {% endif %}
+                                    </button>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>

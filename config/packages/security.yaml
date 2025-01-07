@@ -30,6 +30,7 @@ security:
         default_target_path: public_articles # Après une connexion réussie, l'utilisateur est redirigé vers la page /users
       logout: # Gestion de la déconnexion
         path: /logout # La route pour se déconnecter
+        target: app_login # Après une déconnexion réussie, l'utilisateur est redirigé vers la page de connexion
 
     # Configuration pour les API (commentée ici, mais peut être activée si nécessaire pour les connexions API basées sur JSON ou JWT)
     api_login:
@@ -60,13 +61,20 @@ security:
     # Autorise l'accès à la page d'inscription sans être authentifié
     - { path: ^/users/new, roles: PUBLIC_ACCESS } # La page /users/new (inscription) est publique (tout le monde peut y accéder)
 
-    - { path: ^/articles, roles: IS_AUTHENTICATED_FULLY } # Autorise l'accès public aux articles
+    - { path: ^/articles, roles: PUBLIC_ACCESS } # Autorise l'accès public aux articles
 
     - { path: ^/admin/article, roles: ROLE_ADMIN }
 
     - { path: ^/admin/user, roles: ROLE_ADMIN }
 
+    - { path: ^/admin/offre, roles: ROLE_ADMIN }
+
+    - { path: ^/cart/add, roles: ROLE_USER }
+
     - { path: ^/api/login, roles: PUBLIC_ACCESS }
+
+    - { path: ^/register, roles: PUBLIC_ACCESS }
+
 
 monolog:
   channels: ["security"]

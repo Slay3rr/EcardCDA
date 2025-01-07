@@ -12,13 +12,12 @@
                 <input type="password" id="password" name="_password" class="form-control" required>
             </div>
             <button type="submit" class="btn btn-primary mt-3">Se connecter</button>
-
-
         </form>
         {% if error %}
             <div class="alert alert-danger mt-3">
                 {{ error.messageKey|trans(error.messageData, 'security') }}
             </div>
+        
         {% endif %}
     </div>
 {% endblock %}

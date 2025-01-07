@@ -6,6 +6,9 @@ use App\Entity\Offre;
 use App\Entity\Article;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -22,13 +25,19 @@ class OffreController extends AbstractController
         $offre->setUser($this->getUser());
 
         $form = $this->createFormBuilder($offre)
-            ->add('price', \Symfony\Component\Form\Extension\Core\Type\NumberType::class, [
+            ->add('price', NumberType::class, [
                 'label' => 'Prix de l\'offre',
                 'required' => true
             ])
-            ->add('quantity', \Symfony\Component\Form\Extension\Core\Type\IntegerType::class, [
+            ->add('quantity', IntegerType::class, [
                 'label' => 'Quantité',
                 'required' => true
+            ])
+            -> add('description', TextareaType::class, [
+                'label' => 'Description de l\'offre',
+                'required' => false,
+                
+
             ])
             ->getForm();
 
@@ -67,6 +76,10 @@ class OffreController extends AbstractController
                 'label' => 'Quantité',
                 'attr' => ['class' => 'form-control']
             ])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label' => 'Description'
+            ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -78,10 +91,38 @@ class OffreController extends AbstractController
             return $this->redirectToRoute('public_articles');
         }
 
-        return $this->render('offer/edit.html.twig', [
+        return $this->render('offre/edit.html.twig', [
             'form' => $form->createView(),
             'offre' => $offre,
         ]);
     }
+    #[Route('/offre/{id}/delete', name: 'offer_delete', methods: ['POST'])]
+    public function delete(Offre $offre, EntityManagerInterface $em): Response
+    {
+        // Vérifier que l'utilisateur connecté est le propriétaire de l'offre
+        if ($offre->getUser() !== $this->getUser()) {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisé à supprimer cette offre.');
+            return $this->redirectToRoute('public_articles');
+        }
+    
+        // Supprimer l'offre
+        $em->remove($offre);
+        $em->flush();
+    
+        $this->addFlash('success', 'Votre offre a été supprimée.');
+        return $this->redirectToRoute('public_articles');
+    }
+    
+    #[Route('/admin/offre/{id}/delete', name: 'admin_offer_delete', methods: ['POST'])]
+public function adminDelete(Offre $offre, EntityManagerInterface $entityManager): Response
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN'); // Vérifie que l'utilisateur est administrateur
+
+    $entityManager->remove($offre); // Supprime l'offre
+    $entityManager->flush();
+
+    $this->addFlash('success', 'L\'offre a été supprimée avec succès.');
+    return $this->redirectToRoute('public_articles'); // Redirige après la suppression
+}
 }
 

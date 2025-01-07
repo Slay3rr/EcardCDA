@@ -18,73 +18,91 @@ class CartController extends AbstractController
 {
     // Afficher le panier
     #[Route('/cart', name: 'cart_show')]
-    public function showCart(SessionInterface $session): Response
-    {
-        $cart = $session->get('cart', []);
-        // dump($cart); die ;
-        $total = 0;
+public function showCart(SessionInterface $session, EntityManagerInterface $em): Response
+{
+    $cart = $session->get('cart', []); // Récupère le panier de la session
+    $total = 0;
+    $cartWithDetails = []; // Tableau pour stocker les détails complets
 
-        foreach ($cart as $item) {
-            $total += $item['offer']->getPrice() * $item['quantity'];
+    foreach ($cart as $key => $item) {
+        $offre = $em->getRepository(Offre::class)->find($key); // Recharge l'offre par son ID
+
+        if ($offre) {
+            // Ajouter les détails de l'offre dans le tableau
+            $cartWithDetails[] = [
+                'offer' => $offre,
+                'quantity' => $item['quantity'],
+            ];
+            // Calculer le total
+            $total += $offre->getPrice() * $item['quantity'];
+        } else {
+            // Si l'offre n'existe plus, la retirer du panier
+            unset($cart[$key]);
         }
-
-        return $this->render('cart/index.html.twig', [
-            'cart' => $cart,
-            'total' => $total,
-        ]);
     }
 
+    // Mettre à jour la session si nécessaire
+    $session->set('cart', $cart);
+
+    return $this->render('cart/index.html.twig', [
+        'cart' => $cartWithDetails, // Passer les détails au Twig
+        'total' => $total,
+    ]);
+}
 
 
     // Ajouter une offre au panier
-
-
     #[Route('/cart/add/{id}', name: 'cart_add')]
-public function addToCart(Offre $offre, Request $request, SessionInterface $session, EntityManagerInterface $em): Response
-{
-    if (!$offre->getId()) {
-        throw $this->createNotFoundException('L\'offre spécifiée est invalide.');
-    }
+    public function addToCart(Offre $offre, Request $request, SessionInterface $session, EntityManagerInterface $em): Response
+    {
+        if (!$offre->getId()) {
+            throw $this->createNotFoundException('L\'offre spécifiée est invalide.');
+        }
+        if (!$this->getUser()) {
+            $this->addFlash('error', 'Vous devez être connecté pour ajouter au panier.');
+            return $this->redirectToRoute('app_login');
+        }
+        // Charger explicitement les relations (Article et User)
+        $offre = $em->getRepository(Offre::class)->find($offre->getId());
+        if (!$offre->getArticle() || !$offre->getUser()) {
+            throw $this->createNotFoundException('L\'offre ou ses relations sont incomplètes.');
+        }
     
-    // Récupérer la quantité demandée depuis la requête, par défaut 1
-    $quantity = $request->query->getInt('quantity', 1);
+        $quantity = $request->query->getInt('quantity', 1);
+    
+        if ($offre->getQuantity() < $quantity) {
+            $this->addFlash('error', 'La quantité demandée dépasse celle disponible.');
+            return $this->redirectToRoute('cart_show');
+        }
+    
+        $cart = $session->get('cart', []);
+    
+        if (isset($cart[$offre->getId()])) {
+            $cart[$offre->getId()]['quantity'] += $quantity;
+        } else {
+            $cart[$offre->getId()] = [
+                'offer_id' => $offre->getId(),
+                'quantity' => $quantity,
+            ];
+            
+            
+        }
+        
+        $offre->setQuantity($offre->getQuantity() - $quantity);
+    
+        $em->persist($offre);
+        $em->flush();
+    
+        $session->set('cart', $cart);
 
-    // Vérification : S'assurer que la quantité demandée est disponible
-    if ($offre->getQuantity() < $quantity) {
-        $this->addFlash('error', 'La quantité demandée dépasse celle disponible.');
+    
+        $this->addFlash('success', 'Article ajouté au panier.');
         return $this->redirectToRoute('cart_show');
     }
 
-    // Récupérer le panier depuis la session
-    $cart = $session->get('cart', []);
-
-    // Ajouter l'offre au panier
-    if (isset($cart[$offre->getId()])) {
-        $cart[$offre->getId()]['quantity'] += $quantity;
-    } else {
-        $cart[$offre->getId()] = [
-            'offer' => $offre,
-            'quantity' => $quantity,
-        ];
-    }
-
-    // Mettre à jour la quantité disponible de l'offre
-    $offre->setQuantity($offre->getQuantity() - $quantity);
-
-    // Sauvegarder les changements dans la base de données
-    $em->persist($offre);
-    $em->flush();
-
-    // Mettre à jour le panier dans la session
-    $session->set('cart', $cart);
-
-    $this->addFlash('success', 'Article ajouté au panier.');
-    return $this->redirectToRoute('cart_show');
-
-
-}
+    
 #[Route('/cart/clear', name: 'cart_clear')]
-public function clearCart(SessionInterface $session): Response
+    public function clearCart(SessionInterface $session): Response
 {
     $session->remove('cart'); // Supprime la clé 'cart' de la session
     $this->addFlash('success', 'Votre panier a été vidé.');
@@ -95,7 +113,7 @@ public function clearCart(SessionInterface $session): Response
 
     // Supprimer une offre du panier
     #[Route('/cart/remove/{id}', name: 'cart_remove')]
-public function removeFromCart(Offre $offre, SessionInterface $session, EntityManagerInterface $em): Response
+    public function removeFromCart(Offre $offre, SessionInterface $session, EntityManagerInterface $em): Response
 {
     $cart = $session->get('cart', []);
 

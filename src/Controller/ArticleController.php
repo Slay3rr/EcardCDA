@@ -43,7 +43,7 @@ class ArticleController extends AbstractController
     }
 
     // Route pour la création d'un nouvel article en mode admin
-    #[Route('/admin/article/new', name: 'admin_article_new', methods: ['GET', 'POST'])]
+    #[Route('/api/article/new', name: 'api_article_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -70,7 +70,7 @@ class ArticleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($article);
             $entityManager->flush();
-            return $this->redirectToRoute('admin_article_index');
+            return $this->redirectToRoute('api_article_index');
         }
 
         return $this->render('article/new.html.twig', [
@@ -79,7 +79,7 @@ class ArticleController extends AbstractController
     }
 
     // Route pour l'affichage des articles admins
-    #[Route('/admin/article', name: 'admin_article_index', methods: ['GET'])]
+    #[Route('/api/article', name: 'api_article_index', methods: ['GET'])]
     public function adminIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -94,7 +94,7 @@ class ArticleController extends AbstractController
     }
 
     // Route pour l'affichage détaillé d'un article en mode admin
-    #[Route('/admin/article/{id}', name: 'admin_article_show', methods: ['GET'])]
+    #[Route('/api/article/{id}', name: 'api_article_show', methods: ['GET'])]
     public function adminShow(Article $article): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -105,7 +105,7 @@ class ArticleController extends AbstractController
     }
 
     // Route pour l'édition d'un article en mode admin
-    #[Route('/admin/article/{id}/edit', name: 'admin_article_edit', methods: ['GET', 'POST'])]
+    #[Route('/api/article/{id}/edit', name: 'api_article_edit', methods: ['GET', 'POST'])]
     public function edit(Article $article, Request $request, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -130,7 +130,7 @@ class ArticleController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            return $this->redirectToRoute('admin_article_index');
+            return $this->redirectToRoute('api_article_index');
         }
 
         return $this->render('article/edit.html.twig', [
@@ -140,7 +140,7 @@ class ArticleController extends AbstractController
     }
 
     // Route pour supprimer un article en mode admin
-    #[Route('/admin/article/{id}/delete', name: 'admin_article_delete', methods: ['POST'])]
+    #[Route('/api/article/{id}/delete', name: 'api_article_delete', methods: ['POST'])]
     public function delete(Article $article, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
@@ -148,7 +148,7 @@ class ArticleController extends AbstractController
         $entityManager->remove($article);
         $entityManager->flush();
 
-        return $this->redirectToRoute('admin_article_index');
+        return $this->redirectToRoute('api_article_index');
     }
 
     #[Route('/articles/category', name: 'articles_by_category', methods: ['GET'])]

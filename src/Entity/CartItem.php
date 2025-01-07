@@ -49,4 +49,17 @@ class CartItem
 
         return $this;
     }
+    private ?Cart $cart = null;
+
+public function getCart(): ?Cart
+{
+    return $this->cart;
+}
+
+public function setCart(?Cart $cart): self
+{
+    $this->cart = $cart;
+
+    return $this;
+}
 }

@@ -18,7 +18,7 @@
 <h1>Liste des articles</h1>
 
 {% if is_granted('ROLE_ADMIN') %}
-    <a href="{{ path('admin_article_new') }}" class="btn btn-primary mb-3">Ajouter un article</a>
+    <a href="{{ path('api_article_new') }}" class="btn btn-primary mb-3">Ajouter un article</a>
 {% endif %}
 
 <table class="table">
@@ -48,8 +48,8 @@
 
                 {% if is_granted('ROLE_ADMIN') %}
                     <!-- Seuls les admins peuvent modifier ou supprimer -->
-                    <a href="{{ path('admin_article_edit', {id: article.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form method="post" action="{{ path('admin_article_delete', {id: article.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+                    <a href="{{ path('api_article_edit', {id: article.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
+                    <form method="post" action="{{ path('api_article_delete', {id: article.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
                         <button class="btn btn-danger btn-sm">Supprimer</button>
                     </form>
