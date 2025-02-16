@@ -19,7 +19,7 @@
             </tr>
         </thead>
         <tbody>
-           {% for item in cart %}
+    {% for item in cart %}
 <tr>
     <td>{{ item.offer.article.Titre }}</td> {# Titre de l'article via Offre -> Article #}
     <td>{{ item.offer.user.email }}</td> {# Email du vendeur via Offre -> User #}
@@ -35,9 +35,7 @@
         <a href="{{ path('cart_remove', {id: item.offer.id}) }}" class="btn btn-danger btn-sm">Supprimer</a>
     </td>
 </tr>
-{% endfor %}
-
-
+    {% endfor %}
         </tbody>
     </table>
     <h3>Total : {{ total }} €</h3>

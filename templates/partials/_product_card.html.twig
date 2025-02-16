@@ -1,0 +1,22 @@
+{# templates/partials/_product_card.html.twig #}
+{% macro display(product) %}
+  <div class="card border-light shadow-sm h-100">
+    <img
+      src="{{ asset('images/placeholder.jpg') }}"
+      class="card-img-top"
+      alt="{{ product.Titre }}"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ product.Titre }}</h5>
+      <p class="card-text text-muted mb-2">
+        {{ product.content|length > 70 ? product.content|slice(0,70) ~ '...' : product.content }}
+      </p>
+      {% if product.price is not null %}
+        <p class="card-text fw-bold">{{ product.price }} €</p>
+      {% endif %}
+      <a href="{{ path('public_article_show', {id: product.id}) }}" class="btn btn-primary">
+        Voir le détail
+      </a>
+    </div>
+  </div>
+{% endmacro %}

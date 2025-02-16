@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Article;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Category;
+
 
 
 /**
@@ -22,23 +24,25 @@ class ArticleRepository extends ServiceEntityRepository
         * @return Article[]
         */
         public function findByCategory(Category $category): array
-        {
-            return $this->createQueryBuilder('a')
-                ->innerJoin('a.Category', 'c')
-                ->andWhere('c.id = :categoryId')
-                ->setParameter('categoryId', $category->getId())
-                ->orderBy('a.id', 'DESC')
-                ->getQuery()
-                ->getResult();
-        }
+{
+    return $this->createQueryBuilder('a')
+        ->innerJoin('a.Category', 'c')
+        ->andWhere('c.id = :categoryId')
+        ->setParameter('categoryId', $category->getId())
+        ->orderBy('a.id', 'DESC')
+        ->getQuery()
+        ->getResult();
+}
 
-    //    public function findOneBySomeField($value): ?Article
-    //    {
-    //        return $this->createQueryBuilder('a')
-    //            ->andWhere('a.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+public function findByTitleOrContent(string $query): array
+{
+    return $this->createQueryBuilder('a')
+         ->where('a.Titre LIKE :query OR a.content LIKE :query')
+         ->setParameter('query', '%' . $query . '%')
+         ->orderBy('a.id', 'DESC')
+         ->getQuery()
+         ->getResult();
+}
+
+        
 }

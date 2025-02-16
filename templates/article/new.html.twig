@@ -22,8 +22,8 @@
     </div>
 
     <div class="form-group mt-3">
-        {{ form_label(form.price) }}  {# Ajouter le label pour le champ 'price' #}
-        {{ form_widget(form.price, { 'attr': {'class': 'form-control', 'step': '0.01'} }) }}  {# Afficher le champ price avec un attribut 'step' pour permettre des décimales #}
+        {{ form_label(form.price) }} 
+        {{ form_widget(form.price, { 'attr': {'class': 'form-control', 'step': '0.01'} }) }}
     </div>
 
     <button type="submit" class="btn btn-primary mt-3">{{ form.vars.value.id ? 'Update' : 'Create' }}</button>

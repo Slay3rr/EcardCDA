@@ -1,153 +1,192 @@
 <?php
 
-// Déclaration du namespace. Cela indique que cette classe appartient à l'espace "App\Entity"
-// Cette classe représente une entité utilisateur qui est mappée à la base de données
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping as ORM; // On importe les annotations de Doctrine pour gérer la persistance des données en base de données
-use Symfony\Component\Security\Core\User\UserInterface; // On importe l'interface UserInterface de Symfony pour la gestion des utilisateurs
-use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface; // On importe PasswordAuthenticatedUserInterface pour gérer l'authentification avec mot de passe
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Entity] // Cette annotation indique à Doctrine que cette classe est une entité et qu'elle sera mappée à une table en base de données
-class User implements UserInterface, PasswordAuthenticatedUserInterface // La classe User implémente UserInterface et PasswordAuthenticatedUserInterface, ce qui signifie que cette classe doit gérer les informations d'authentification de l'utilisateur
+#[ORM\Entity]
+#[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé.")]
+#[UniqueEntity(fields: ["username"], message: "Ce nom d'utilisateur est déjà pris.")]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    #[ORM\Id] // Cette annotation indique que la propriété suivante (id) est la clé primaire de l'entité
-    #[ORM\GeneratedValue] // Cette annotation indique que la valeur de la clé primaire sera générée automatiquement par la base de données
-    #[ORM\Column] // Cette annotation définit cette propriété comme une colonne en base de données.
-    private ?int $id = null; // Propriété privée pour stocker l'ID de l'utilisateur. Elle est de type int et peut être nulle (lors de la création de l'utilisateur)
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
 
-    #[ORM\Column(length: 180, unique: true)] // La colonne 'email' est unique et doit être d'une longueur maximale de 180 caractères
-    private ?string $email = null; // Propriété privée pour stocker l'email de l'utilisateur
+    #[ORM\Column(length: 180, unique: true)]
+    private ?string $email = null;
 
-    #[ORM\Column] // Cette annotation définit la propriété suivante comme une colonne de la table
-    private array $roles = []; // Propriété privée pour stocker les rôles de l'utilisateur sous forme de tableau
+    #[ORM\Column]
+    private array $roles = [];
 
-    #[ORM\Column] // Cette annotation définit la propriété suivante comme une colonne de la table
-    private ?string $password = null; // Propriété privée pour stocker le mot de passe de l'utilisateur
+    #[ORM\Column]
+    private ?string $password = null;
 
-    #[ORM\Column(length: 50)] // La propriété 'name' est une colonne avec une longueur maximale de 50 caractères
-    private ?string $name = null; // Propriété privée pour stocker le nom de l'utilisateur
 
-    // Méthode pour obtenir l'ID de l'utilisateur. Elle renvoie l'ID de l'entité
-    public function getId(): ?int { return $this->id; }
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $name = null;
 
-    // Méthode pour obtenir l'email de l'utilisateur
-    public function getEmail(): ?string { return $this->email; }
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $firstName = null;
 
-    // Méthode pour définir l'email de l'utilisateur
-    public function setEmail(string $email): self { 
+    #[ORM\Column(length: 50, nullable: true, unique: true)]
+    private ?string $username = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $addressStreet = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $addressCity = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $addressPostal = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $addressCountry = null;
+    
+
+   
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
         $this->email = $email;
         return $this;
     }
 
-    // Méthode pour obtenir les rôles de l'utilisateur
-    // Par défaut, la méthode ajoute 'ROLE_USER' pour s'assurer que chaque utilisateur a ce rôle
     public function getRoles(): array
     {
-        $roles = $this->roles; // On copie les rôles existants de l'utilisateur
-        $roles[] = 'ROLE_USER'; // On ajoute 'ROLE_USER' comme rôle par défaut si aucun autre rôle n'est défini
-        return array_unique($roles); // On retourne les rôles sans doublons
-    }
-
-    // Méthode pour définir les rôles de l'utilisateur
-    public function setRoles(array $roles): self { 
-        $this->roles = $roles; // On assigne les rôles passés en argument à la propriété $roles
-        return $this; 
-    }
-
-    // Méthode pour obtenir le mot de passe de l'utilisateur
-    public function getPassword(): ?string { return $this->password; }
-
-    // Méthode pour définir le mot de passe de l'utilisateur
-    public function setPassword(string $password): self { 
-        $this->password = $password; // On assigne le mot de passe passé en argument à la propriété $password
-        return $this; 
-    }
-
-    // Méthode pour obtenir le nom de l'utilisateur
-    public function getName(): ?string { return $this->name; }
-
-    // Méthode pour définir le nom de l'utilisateur
-    public function setName(string $name): self { 
-        $this->name = $name; // On assigne le nom passé en argument à la propriété $name
-        return $this; 
-    }
-
-    // Méthode requise par l'interface PasswordAuthenticatedUserInterface
-    // Elle est vide ici car il n'y a pas de données sensibles à effacer après l'authentification
-    public function eraseCredentials(): void 
-    {
-    }
-
-    // Méthode requise par l'interface UserInterface. Elle renvoie l'identifiant de l'utilisateur (ici, l'email)
-    public function getUserIdentifier(): string 
-    {
-        return $this->email; // Retourne l'email de l'utilisateur comme identifiant unique
-    }
-
-    // src/Entity/User.php
-#[ORM\OneToOne(mappedBy: 'user', targetEntity: Cart::class, cascade: ['persist', 'remove'])]
-private ?Cart $cart = null;
-
-/**
- * @var Collection<int, Offre>
- */
-#[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'user')]
-private Collection $user;
-
-public function __construct()
-{
-    $this->user = new ArrayCollection();
-}
-
-public function getCart(): ?Cart
-{
-    return $this->cart;
-}
-
-public function setCart(?Cart $cart): self
-{
-    // Set the owning side of the relation if necessary
-    if ($cart->getUser() !== $this) {
-        $cart->setUser($this);
-    }
-
-    $this->cart = $cart;
-
-    return $this;
-}
-
-/**
- * @return Collection<int, Offre>
- */
-public function getUser(): Collection
-{
-    return $this->user;
-}
-
-public function addUser(Offre $user): static
-{
-    if (!$this->user->contains($user)) {
-        $this->user->add($user);
-        $user->setUser($this);
-    }
-
-    return $this;
-}
-
-public function removeUser(Offre $user): static
-{
-    if ($this->user->removeElement($user)) {
-        // set the owning side to null (unless already changed)
-        if ($user->getUser() === $this) {
-            $user->setUser(null);
+        $roles = $this->roles;
+        // Garantir que chaque user a ROLE_USER par défaut
+        if (!in_array('ROLE_USER', $roles, true)) {
+            $roles[] = 'ROLE_USER';
         }
+        return array_unique($roles);
     }
 
-    return $this;
-}
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
 
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
 
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+        return $this;
+    }
+
+    // Méthode requise par PasswordAuthenticatedUserInterface
+    public function eraseCredentials(): void
+    {
+        // Rien de particulier ici, sauf si vous stockez des données temporaires sensibles
+    }
+
+    // Méthode requise par UserInterface, identifiant principal
+    public function getUserIdentifier(): string
+    {
+        return $this->email ?? '';
+    }
+
+    // GET/SET name
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    // GET/SET firstName
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+        return $this;
+    }
+
+    // GET/SET username
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(?string $username): self
+    {
+        $this->username = $username;
+        return $this;
+    }
+
+    // GET/SET addressStreet
+    public function getAddressStreet(): ?string
+    {
+        return $this->addressStreet;
+    }
+
+    public function setAddressStreet(?string $addressStreet): self
+    {
+        $this->addressStreet = $addressStreet;
+        return $this;
+    }
+
+    // GET/SET addressCity
+    public function getAddressCity(): ?string
+    {
+        return $this->addressCity;
+    }
+
+    public function setAddressCity(?string $addressCity): self
+    {
+        $this->addressCity = $addressCity;
+        return $this;
+    }
+
+    // GET/SET addressPostal
+    public function getAddressPostal(): ?string
+    {
+        return $this->addressPostal;
+    }
+
+    public function setAddressPostal(?string $addressPostal): self
+    {
+        $this->addressPostal = $addressPostal;
+        return $this;
+    }
+
+    // GET/SET addressCountry
+    public function getAddressCountry(): ?string
+    {
+        return $this->addressCountry;
+    }
+
+    public function setAddressCountry(?string $addressCountry): self
+    {
+        $this->addressCountry = $addressCountry;
+        return $this;
+    }
 }

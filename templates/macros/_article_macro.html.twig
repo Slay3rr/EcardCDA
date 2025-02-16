@@ -1,32 +1,29 @@
 {% macro displayArticle(article) %}
 <div class="product-card" style="border: 1px solid #ccc; padding: 20px; border-radius: 8px; margin: 20px auto; max-width: 600px; text-align: center; background-color: #f9f9f9; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
     
-    <!-- Titre du produit -->
     <h2 style="font-size: 1.8rem; color: #333; margin-bottom: 15px;">{{ article.Titre }}</h2>
-
-    <!-- Description courte du produit -->
     <p style="font-size: 1rem; color: #666; margin-bottom: 20px;">
         {{ article.content }}
     </p>
-
-    <!-- Prix -->
     {% if article.price is not null %}
         <p style="font-size: 1.4rem; color: #e74c3c; font-weight: bold; margin-bottom: 25px;">
             {{ article.price }} €
         </p>
     {% endif %}
-
-    <!-- Bouton pour ajouter une offre (pour les utilisateurs uniquement) -->
+    
+    {# Bouton pour ajouter une nouvelle offre par un utilisateur connecté #}
     {% if is_granted('ROLE_USER') %}
-        <a href="{{ path('add_offer', { 'id': article.id }) }}" style="display: inline-block; padding: 12px 25px; background-color: #f39c12; color: white; text-decoration: none; border-radius: 5px; font-weight: bold; margin-bottom: 20px;">
+        <a href="{{ path('add_offer', { 'id': article.id }) }}" class="btn btn-warning mb-3">
             Ajouter une offre
         </a>
+    {% else %}
+        <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter une offre</p>
     {% endif %}
-
-    <!-- Offres disponibles -->
+    
+    {# Affichage des offres existantes avec actions spécifiques #}
     {% if article.offres|length > 0 %}
         <h3 style="font-size: 1.4rem; color: #555; margin-top: 30px; margin-bottom: 20px;">Offres disponibles</h3>
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 15px; font-size: 1rem;">
+        <table class="table" style="font-size: 1rem;">
             <thead>
                 <tr style="background-color: #f4f4f4; text-align: left;">
                     <th style="padding: 12px; border: 1px solid #ddd;">Vendeur</th>
@@ -45,37 +42,34 @@
                         <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.quantity }}</td>
                         <td style="padding: 12px; border: 1px solid #ddd;">{{ offre.description }}</td>
                         <td style="padding: 12px; border: 1px solid #ddd; text-align: center;">
-                            {% if app.user == offre.user %}
-                                <!-- Boutons pour le propriétaire de l'offre -->
-                                <a href="{{ path('offer_edit', { id: offre.id }) }}" class="btn btn-warning btn-sm" style="margin-bottom: 5px; display: block;">
+                            {% if app.user and app.user.id == offre.user.id %}
+                                <a href="{{ path('offer_edit', { id: offre.id }) }}" class="btn btn-warning btn-sm d-block mb-2">
                                     Modifier
                                 </a>
-                                <form action="{{ path('offer_delete', { id: offre.id }) }}" method="post" style="display: inline-block; margin-top: 5px;">
+                                <form action="{{ path('offer_delete', { id: offre.id }) }}" method="post" class="d-inline-block mt-1">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
                                         Supprimer
                                     </button>
                                 </form>
                             {% elseif is_granted('ROLE_ADMIN') %}
-                                <!-- Bouton de suppression pour l'administrateur -->
-                                <form action="{{ path('admin_offer_delete', { id: offre.id }) }}" method="post" style="display:inline-block;">
+                                <form action="{{ path('admin_offer_delete', { id: offre.id }) }}" method="post" class="d-inline-block">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
                                         Supprimer l'offre
                                     </button>
                                 </form>
                             {% else %}
-                                <!-- Bouton pour ajouter au panier -->
-                                <form action="{{ path('cart_add', { id: offre.id }) }}" method="get" style="display: flex; align-items: center;">
-                                    <input type="number" name="quantity" value="1" min="1" max="{{ offre.quantity }}" style="width: 60px; margin-right: 10px;" required>
-                                    <button type="submit" style="padding: 8px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; border: none;">
-                                    {% if is_granted('ROLE_USER') %}
-                                        Ajouter au panier
-                                    {% else %}
-                                        Connectez-vous pour ajouter au panier
-                                    {% endif %}
-                                    </button>
-                                </form>
+                                {% if is_granted('ROLE_USER') %}
+                                    <form action="{{ path('cart_add', { id: offre.id }) }}" method="get" class="d-flex align-items-center">
+                                        <input type="number" name="quantity" value="1" min="1" max="{{ offre.quantity }}" class="form-control" style="width: 60px; margin-right: 10px;" required>
+                                        <button type="submit" class="btn btn-success btn-sm">
+                                            Ajouter au panier
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <p><a href="{{ path('app_login') }}">Connectez-vous</a> pour ajouter au panier</p>
+                                {% endif %}
                             {% endif %}
                         </td>
                     </tr>
@@ -87,5 +81,5 @@
         <p style="color: #888; font-size: 1rem; margin-top: 15px;">Aucune offre disponible pour cet article.</p>
     {% endif %}
 </div>
-<a href="{{ path('public_articles') }}" style="display: block; margin: 20px auto; text-align: center; font-size: 1rem; color: #007bff; text-decoration: none;">Retour à la liste</a>
+<a href="{{ path('public_articles') }}" class="d-block text-center mt-4" style="font-size: 1rem; color: #007bff; text-decoration: none;">Retour à la liste</a>
 {% endmacro %}

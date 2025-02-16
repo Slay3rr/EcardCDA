@@ -16,108 +16,123 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 
 
- 
-#[Route('/api/admin/users', name: 'admin_users_')]
 class UserController extends AbstractController
 {
-    #[Route('', name: 'list', methods: ['GET'])]
-    public function list(UserRepository $userRepository): JsonResponse
+    #[Route('/profile', name: 'user_profile', methods: ['GET'])]
+    public function profile(): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $users = $userRepository->findAll();
-        return $this->json($users, 200, [], ['groups' => 'user:read']);
+        // Affiche la page de profil de l'utilisateur connecté
+        return $this->render('user/profile.html.twig');
     }
 
-    #[Route('', name: 'create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $data = json_decode($request->getContent(), true);
-
-        $user = new User();
-        $user->setEmail($data['email']);
-        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
-        $user->setRoles(['ROLE_USER']);
-
-        $em->persist($user);
-        $em->flush();
-
-        return $this->json(['message' => 'Utilisateur créé'], 201);
-    }
-
-    #[Route('/{id}', name: 'update', methods: ['PUT'])]
-    public function update(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = $userRepository->find($id);
-        if (!$user) {
-            return $this->json(['message' => 'Utilisateur non trouvé'], 404);
+    #[Route('/profile/update', name: 'user_profile_update', methods: ['POST'])]
+    public function updateProfile(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        UserPasswordHasherInterface $passwordHasher
+    ): Response {
+        $user = $this->getUser();
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException();
         }
 
-        $data = json_decode($request->getContent(), true);
-        if (isset($data['email'])) {
+        // Récupérer les données du formulaire
+        $name = trim($request->request->get('name'));
+        $firstName = trim($request->request->get('first_name'));
+        $addressStreet = trim($request->request->get('address_street'));
+        $addressCity = trim($request->request->get('address_city'));
+        $addressPostal = trim($request->request->get('address_postal'));
+        $addressCountry = trim($request->request->get('address_country'));
+        $email = trim($request->request->get('email'));
+        $plainPassword = $request->request->get('password');
+        $passwordConfirmation = $request->request->get('password_confirmation');
+
+        // Mise à jour des informations
+        $user->setName($name);
+        $user->setFirstName($firstName);
+        $user->setAddressStreet($addressStreet);
+        $user->setAddressCity($addressCity);
+        $user->setAddressPostal($addressPostal);
+        $user->setAddressCountry($addressCountry);
+        $user->setEmail($email);
+
+        // Modification du mot de passe si renseigné
+        if (!empty($plainPassword)) {
+            if ($plainPassword !== $passwordConfirmation) {
+                $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
+                return $this->redirectToRoute('user_profile');
+            }
+            $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashedPassword);
+        }
+
+        $entityManager->flush();
+        $this->addFlash('success', 'Votre profil a été mis à jour.');
+        return $this->redirectToRoute('user_profile');
+    }
+    #[Route('/api/admin/users', name: 'admin_users_')]
+
+    
+        #[Route('', name: 'list', methods: ['GET'])]
+        public function list(UserRepository $userRepository): JsonResponse
+        {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            $users = $userRepository->findAll();
+            return $this->json($users, 200, [], ['groups' => 'user:read']);
+        }
+    
+        #[Route('', name: 'create', methods: ['POST'])]
+        public function create(Request $request, EntityManagerInterface $em): JsonResponse
+        {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            $data = json_decode($request->getContent(), true);
+    
+            $user = new User();
             $user->setEmail($data['email']);
+            $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
+            $user->setRoles(['ROLE_USER']);
+    
+            $em->persist($user);
+            $em->flush();
+    
+            return $this->json(['message' => 'Utilisateur créé'], 201);
         }
-        if (isset($data['roles'])) {
-            $user->setRoles($data['roles']);
+    
+        #[Route('/{id}', name: 'update', methods: ['PUT'])]
+        public function update(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
+        {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            $user = $userRepository->find($id);
+            if (!$user) {
+                return $this->json(['message' => 'Utilisateur non trouvé'], 404);
+            }
+    
+            $data = json_decode($request->getContent(), true);
+            if (isset($data['email'])) {
+                $user->setEmail($data['email']);
+            }
+            if (isset($data['roles'])) {
+                $user->setRoles($data['roles']);
+            }
+    
+            $em->flush();
+            return $this->json(['message' => 'Utilisateur mis à jour'], 200);
         }
-
-        $em->flush();
-        return $this->json(['message' => 'Utilisateur mis à jour'], 200);
+    
+        #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
+        public function delete(int $id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
+        {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
+            $user = $userRepository->find($id);
+            if (!$user) {
+                return $this->json(['message' => 'Utilisateur non trouvé'], 404);
+            }
+    
+            $em->remove($user);
+            $em->flush();
+            return $this->json(['message' => 'Utilisateur supprimé'], 200);
+        }
+        
     }
+    
 
-    #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-    public function delete(int $id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        $user = $userRepository->find($id);
-        if (!$user) {
-            return $this->json(['message' => 'Utilisateur non trouvé'], 404);
-        }
-
-        $em->remove($user);
-        $em->flush();
-        return $this->json(['message' => 'Utilisateur supprimé'], 200);
-    }
-}
-// #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
-//     public function register(Request $request, UserPasswordHasherInterface $passwordHasher, EntityManagerInterface $entityManager): Response
-//     {
-//         if ($request->isMethod('POST')) {
-//             // Récupérer les données du formulaire
-//             $email = $request->request->get('email');
-//             $username = $request->request->get('username');
-//             $plainPassword = $request->request->get('password');
-//             $passwordConfirmation = $request->request->get('password_confirmation');
-
-//             // Vérification des données
-//             if (empty($email) || empty($username) || empty($plainPassword)) {
-//                 $this->addFlash('error', 'Tous les champs sont obligatoires.');
-//                 return $this->redirectToRoute('app_register');
-//             }
-
-//             if ($plainPassword !== $passwordConfirmation) {
-//                 $this->addFlash('error', 'Les mots de passe ne correspondent pas.');
-//                 return $this->redirectToRoute('app_register');
-//             }
-
-//             // Création du nouvel utilisateur
-//             $user = new User();
-//             $user->setEmail($email);
-//             // $user->setUsername($username);
-
-//             // Hasher le mot de passe
-//             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
-//             $user->setPassword($hashedPassword);
-
-//             // Enregistrer l'utilisateur dans la base de données
-//             $entityManager->persist($user);
-//             $entityManager->flush();
-
-//             $this->addFlash('success', 'Votre compte a été créé avec succès ! Connectez-vous.');
-//             return $this->redirectToRoute('app_login');
-//         }
-
-//         // Afficher le formulaire d'inscription
-//         return $this->render('user/register.html.twig');
-//     }

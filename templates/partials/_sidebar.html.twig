@@ -1,0 +1,16 @@
+{# templates/partials/_sidebar.html.twig #}
+<div class="col-12 col-md-3 mb-4">
+  <div class="list-group">
+    <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+      Catégories
+    </a>
+    {% for category in categories %}
+      <a
+        href="{{ path('articles_by_category', { id: category.id }) }}"
+        class="list-group-item list-group-item-action"
+      >
+        {{ category.name }}
+      </a>
+    {% endfor %}
+  </div>
+</div>

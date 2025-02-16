@@ -22,8 +22,8 @@ class CategoryRepository extends ServiceEntityRepository
     public function findByName(string $name): ?Category
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.name = :name')
-            ->setParameter('name', $name)
+            ->andWhere('c.name LIKE :name')
+            ->setParameter('name', '%' . $name . '%')
             ->getQuery()
             ->getOneOrNullResult();
     }

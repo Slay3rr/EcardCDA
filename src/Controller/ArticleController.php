@@ -151,45 +151,71 @@ class ArticleController extends AbstractController
         return $this->redirectToRoute('api_article_index');
     }
 
-    #[Route('/articles/category', name: 'articles_by_category', methods: ['GET'])]
-    public function articlesByCategorySearch(Request $request, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
-    {
-        $categoryId = $request->query->get('id'); // Récupère l'ID depuis le formulaire.
+    #[Route('/articles/category', name: 'articles_by_category_search', methods: ['GET'])]
+public function articlesByCategorySearch(Request $request, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
+{
+    $categoryId = $request->query->get('id'); // Récupère l'ID depuis le formulaire.
 
-        if ($categoryId) {
-            $category = $categoryRepository->find($categoryId);
-            if (!$category) {
-                throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
-            }
-
-            $articles = $category->getArticles(); // Récupérer les articles liés à cette catégorie.
-        } else {
-            // Si aucune catégorie n'est sélectionnée, afficher tous les articles.
-            $articles = $articleRepository->findAll();
-        }
-
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles,
-            'categories' => $categoryRepository->findAll(), // Pour le menu de catégorie
-        ]);
-    }
-
-    #[Route('/articles/category/{id}', name: 'articles_by_category', methods: ['GET'])]
-    public function articlesByCategory(int $id, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
-    {
-        $category = $categoryRepository->find($id);
-
+    if ($categoryId) {
+        $category = $categoryRepository->find($categoryId);
         if (!$category) {
             throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
         }
 
         $articles = $category->getArticles(); // Récupérer les articles liés à cette catégorie.
-
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles,
-            'categories' => $categoryRepository->findAll(), // Pour le menu.
-            'currentCategory' => $category, // Pour identifier la catégorie active.
-        ]);
+    } else {
+        // Si aucune catégorie n'est sélectionnée, afficher tous les articles.
+        $articles = $articleRepository->findAll();
     }
+
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles,
+        'categories' => $categoryRepository->findAll(), // Pour le menu de catégorie
+    ]);
+}
+
+
+#[Route('/articles/category/{id}', name: 'articles_by_category', methods: ['GET'])]
+public function articlesByCategory(int $id, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
+{
+    $category = $categoryRepository->find($id);
+    if (!$category) {
+        throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
+    }
+    $articles = $category->getArticles();
+
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles,
+        'categories' => $categoryRepository->findAll(),
+        'currentCategory' => $category,
+    ]);
+}
+
+#[Route('/articles/search', name: 'article_search', methods: ['GET'])]
+public function search(Request $request, ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+{
+    $searchType = $request->query->get('search_type');
+    $query = $request->query->get('query');
+
+    if ($searchType === 'category') {
+        // Utiliser une recherche partielle sur le nom de catégorie
+        $category = $categoryRepository->findByName($query);
+        if ($category) {
+            $articles = $articleRepository->findByCategory($category);
+        } else {
+            $articles = [];
+        }
+    } elseif ($searchType === 'article') {
+        $articles = $articleRepository->findByTitleOrContent($query);
+    } else {
+        $articles = $articleRepository->findAll();
+    }
+
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles,
+        'categories' => $categoryRepository->findAll(),
+    ]);
+}
+
 
 }

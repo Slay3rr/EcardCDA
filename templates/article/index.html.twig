@@ -42,19 +42,20 @@
                     {{ category.name }}{% if not loop.last %}, {% endif %}
                 {% endfor %}
             </td>
-            <td>
-                <!-- Tous les utilisateurs peuvent voir l'article -->
-                <a href="{{ path('public_article_show', {id: article.id}) }}" class="btn btn-info">Voir</a>
+           <td>
+  <a href="{{ path('public_article_show', {id: article.id}) }}" class="btn btn-info btn-sm">Voir</a>
+  {% if is_granted('ROLE_USER') %}
+      <a href="{{ path('add_offer', { 'id': article.id }) }}" class="btn btn-warning btn-sm mt-1">Ajouter une offre</a>
+  {% endif %}
+  {% if is_granted('ROLE_ADMIN') %}
+      <a href="{{ path('api_article_edit', {id: article.id}) }}" class="btn btn-warning btn-sm mt-1">Modifier</a>
+      <form method="post" action="{{ path('api_article_delete', {id: article.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
+          <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
+          <button class="btn btn-danger btn-sm">Supprimer</button>
+      </form>
+  {% endif %}
+</td>
 
-                {% if is_granted('ROLE_ADMIN') %}
-                    <!-- Seuls les admins peuvent modifier ou supprimer -->
-                    <a href="{{ path('api_article_edit', {id: article.id}) }}" class="btn btn-warning btn-sm">Modifier</a>
-                    <form method="post" action="{{ path('api_article_delete', {id: article.id}) }}" style="display:inline;" onsubmit="return confirm('Êtes-vous sûr ?');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ article.id) }}">
-                        <button class="btn btn-danger btn-sm">Supprimer</button>
-                    </form>
-                {% endif %}
-            </td>
         </tr>
     {% endfor %}
     </tbody>

@@ -1,0 +1,55 @@
+{# templates/user/profile.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+  <h1 class="mb-4">Mon Profil</h1>
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      <h4>Informations du Profil</h4>
+    </div>
+    <div class="card-body">
+      <form method="post" action="{{ path('user_profile_update') }}">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom</label>
+          <input type="text" id="name" name="name" class="form-control" value="{{ app.user.name }}" required>
+        </div>
+        <div class="mb-3">
+          <label for="first_name" class="form-label">Prénom</label>
+          <input type="text" id="first_name" name="first_name" class="form-control" value="{{ app.user.firstName }}" required>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Adresse</label>
+          <input type="text" id="address_street" name="address_street" class="form-control mb-2" placeholder="Rue" value="{{ app.user.addressStreet }}" required>
+          <div class="row">
+            <div class="col-md-4">
+              <input type="text" id="address_city" name="address_city" class="form-control" placeholder="Ville" value="{{ app.user.addressCity }}" required>
+            </div>
+            <div class="col-md-4">
+              <input type="text" id="address_postal" name="address_postal" class="form-control" placeholder="Code Postal" value="{{ app.user.addressPostal }}" required>
+            </div>
+            <div class="col-md-4">
+              <input type="text" id="address_country" name="address_country" class="form-control" placeholder="Pays" value="{{ app.user.addressCountry }}" required>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="email" id="email" name="email" class="form-control" value="{{ app.user.email }}" required>
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Mot de passe</label>
+          <input type="password" id="password" name="password" class="form-control" placeholder="Laissez vide pour ne pas modifier" >
+        </div>
+        <div class="mb-3">
+          <label for="password_confirmation" class="form-label">Confirmation du mot de passe</label>
+          <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" placeholder="Laissez vide pour ne pas modifier" >
+        </div>
+        <button type="submit" class="btn btn-primary">Modifier le Profil</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
