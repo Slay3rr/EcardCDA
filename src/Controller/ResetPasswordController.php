@@ -166,8 +166,10 @@ class ResetPasswordController extends AbstractController
             ])
         ;
 
+        $this->addFlash('info', 'Tentative d’envoi de mail à ' . $user->getEmail());
         $mailer->send($email);
-
+        $this->addFlash('info', 'Envoi mail terminé');
+        
         // Store the token object in session for retrieval in check-email route.
         $this->setTokenObjectInSession($resetToken);
 
