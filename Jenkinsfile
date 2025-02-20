@@ -39,8 +39,7 @@ pipeline {
                     def envLocal = """
 APP_ENV=prod
 APP_DEBUG=1
-DATABASE_URL=mysql://root:routitop@127.0.0.1:3306/${DEPLOY_DIR}?serverVersion=8.3.0&charset=utf8mb4
-
+DATABASE_URL=mysql://root:routitop@127.0.0.1:3306/\${DEPLOY_DIR}?serverVersion=8.3.0&charset=utf8mb4
 # Configuration JWT
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
