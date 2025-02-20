@@ -7,6 +7,10 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
 
 #[ORM\Entity]
 #[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé.")]
@@ -16,12 +20,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["user:read", "admin:read"])]
+
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
+    #[Groups(["user:read", "admin:read"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["user:read", "admin:read"])]
     private array $roles = [];
 
     #[ORM\Column]
@@ -29,12 +37,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(["user:read", "admin:read"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 50, nullable: true)]
+    #[Groups(["user:read", "admin:read"])]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 50, nullable: true, unique: true)]
+    #[Groups(["user:read", "admin:read"])]
     private ?string $username = null;
 
     #[ORM\Column(length: 100, nullable: true)]
@@ -48,6 +59,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $addressCountry = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Offre::class, cascade: ['remove'], orphanRemoval: true)]
+    private Collection $offres;
+
+    public function __construct()
+    {
+        $this->offres = new ArrayCollection();
+    }
     
 
    
@@ -189,4 +208,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->addressCountry = $addressCountry;
         return $this;
     }
+    /**
+     * @return Collection<int, Offre>
+     */
+    public function getOffres(): Collection
+    {
+        return $this->offres;
+    }
+
+    public function addOffre(Offre $offre): self
+    {
+        if (!$this->offres->contains($offre)) {
+            $this->offres->add($offre);
+            $offre->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOffre(Offre $offre): self
+    {
+        if ($this->offres->removeElement($offre)) {
+            if ($offre->getUser() === $this) {
+                $offre->setUser(null);
+            }
+        }
+
+        return $this;
+    }
 }
+

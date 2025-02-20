@@ -33,25 +33,40 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route(path: '/api/login', name: 'api_login', methods: ['GET', 'POST'])]
-    public function adminlogin(Request $request, UserRepository $userRepository, JWTTokenManagerInterface $jwtManager): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-        $email = $data['email'] ?? null;
+    #[Route(path: '/api/login', name: 'api_login', methods: ['POST'])]
+public function adminLogin(
+    Request $request, 
+    UserRepository $userRepository, 
+    UserPasswordHasherInterface $passwordHasher,
+    JWTTokenManagerInterface $jwtManager
+): JsonResponse {
+    $data = json_decode($request->getContent(), true);
+    $email = $data['email'] ?? null;
+    $password = $data['password'] ?? null;
 
-        $user = $userRepository->findOneBy(['email' => $email]);
+    $user = $userRepository->findOneBy(['email' => $email]);
 
-        if (!$user) {
-            return $this->json(['message' => 'User not found'], Response::HTTP_UNAUTHORIZED);
-        }
-
-        if (!in_array('ROLE_ADMIN', $user->getRoles())) {
-            return $this->json(['message' => 'Access denied. Admin role required.'], Response::HTTP_FORBIDDEN);
-        }
-
-        $token = $jwtManager->create($user);
-        return $this->json(['token' => $token]);
+    if (!$user) {
+        return $this->json(['message' => 'User not found'], Response::HTTP_UNAUTHORIZED);
     }
+
+    if (!$passwordHasher->isPasswordValid($user, $password)) {
+        return $this->json(['message' => 'Invalid credentials'], Response::HTTP_UNAUTHORIZED);
+    }
+
+    if (!in_array('ROLE_ADMIN', $user->getRoles())) {
+        return $this->json(['message' => 'Access denied. Admin role required.'], Response::HTTP_FORBIDDEN);
+    }
+
+    $token = $jwtManager->create($user);
+    return $this->json([
+        'token' => $token,
+        'user' => [
+            'email' => $user->getEmail(),
+            'roles' => $user->getRoles()
+        ]
+    ]);
+}
     #[Route('/logout', name: 'app_logout', methods: ['GET'])]
     public function logout(): void
     {
@@ -132,4 +147,6 @@ class SecurityController extends AbstractController
         // Afficher le formulaire d'inscription
         return $this->render('user/register.html.twig');
     }
+
+    
 }

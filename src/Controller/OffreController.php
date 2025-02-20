@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+
 class OffreController extends AbstractController
 {
     #[Route('/article/{id}/add-offer', name: 'add_offer', methods: ['GET', 'POST'])]
@@ -113,16 +114,6 @@ class OffreController extends AbstractController
         return $this->redirectToRoute('public_articles');
     }
     
-    #[Route('/admin/offre/{id}/delete', name: 'admin_offer_delete', methods: ['POST'])]
-public function adminDelete(Offre $offre, EntityManagerInterface $entityManager): Response
-{
-    $this->denyAccessUnlessGranted('ROLE_ADMIN'); // Vérifie que l'utilisateur est administrateur
-
-    $entityManager->remove($offre); // Supprime l'offre
-    $entityManager->flush();
-
-    $this->addFlash('success', 'L\'offre a été supprimée avec succès.');
-    return $this->redirectToRoute('public_articles'); // Redirige après la suppression
-}
+    
 }
 

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\OffreRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OffreRepository::class)]
 class Offre
@@ -11,20 +12,25 @@ class Offre
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['article:read', 'admin:read'])]
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['article:read', 'admin:read'])]
     private ?float $price = null;
 
     #[ORM\Column]
+    #[Groups(['article:read', 'admin:read'])]
     private ?int $quantity = null;
 
     #[ORM\ManyToOne(inversedBy: 'offres')]
     private ?Article $article = null;
 
-    #[ORM\ManyToOne(inversedBy: 'user')]
+    #[ORM\ManyToOne(inversedBy: 'offres')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['article:read', 'admin:read'])]
     private ?User $user = null;
+
 
     public function getId(): ?int
     {
@@ -79,6 +85,7 @@ class Offre
         return $this;
     }
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[Groups(['article:read', 'admin:read'])]
     private ?string $description = null;
 
     public function getDescription(): ?string

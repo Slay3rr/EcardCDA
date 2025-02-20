@@ -70,68 +70,7 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Votre profil a été mis à jour.');
         return $this->redirectToRoute('user_profile');
     }
-    #[Route('/api/admin/users', name: 'admin_users_')]
-
     
-        #[Route('', name: 'list', methods: ['GET'])]
-        public function list(UserRepository $userRepository): JsonResponse
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
-            $users = $userRepository->findAll();
-            return $this->json($users, 200, [], ['groups' => 'user:read']);
-        }
-    
-        #[Route('', name: 'create', methods: ['POST'])]
-        public function create(Request $request, EntityManagerInterface $em): JsonResponse
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
-            $data = json_decode($request->getContent(), true);
-    
-            $user = new User();
-            $user->setEmail($data['email']);
-            $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT));
-            $user->setRoles(['ROLE_USER']);
-    
-            $em->persist($user);
-            $em->flush();
-    
-            return $this->json(['message' => 'Utilisateur créé'], 201);
-        }
-    
-        #[Route('/{id}', name: 'update', methods: ['PUT'])]
-        public function update(int $id, Request $request, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
-            $user = $userRepository->find($id);
-            if (!$user) {
-                return $this->json(['message' => 'Utilisateur non trouvé'], 404);
-            }
-    
-            $data = json_decode($request->getContent(), true);
-            if (isset($data['email'])) {
-                $user->setEmail($data['email']);
-            }
-            if (isset($data['roles'])) {
-                $user->setRoles($data['roles']);
-            }
-    
-            $em->flush();
-            return $this->json(['message' => 'Utilisateur mis à jour'], 200);
-        }
-    
-        #[Route('/{id}', name: 'delete', methods: ['DELETE'])]
-        public function delete(int $id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
-        {
-            $this->denyAccessUnlessGranted('ROLE_ADMIN');
-            $user = $userRepository->find($id);
-            if (!$user) {
-                return $this->json(['message' => 'Utilisateur non trouvé'], 404);
-            }
-    
-            $em->remove($user);
-            $em->flush();
-            return $this->json(['message' => 'Utilisateur supprimé'], 200);
-        }
         
     }
     

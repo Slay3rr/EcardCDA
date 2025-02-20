@@ -6,6 +6,8 @@ use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+
 
 #[ORM\Entity(repositoryClass: ArticleRepository::class)]
 class Article
@@ -13,12 +15,15 @@ class Article
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(groups: ['article:read', 'admin:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:read', 'admin:read'])]
     private ?string $Titre = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['article:read', 'admin:read'])]
     private ?string $content = null;
 
 
@@ -26,15 +31,18 @@ class Article
      * @var Collection<int, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'articles')]
+    #[Groups(groups: ['article:read', 'admin:read'])]
     private Collection $Category;
 
     #[ORM\Column]
+    #[Groups(groups: ['article:read', 'admin:read'])]
     private ?float $price = null;
 
     /**
      * @var Collection<int, Offre>
      */
     #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'article')]
+    #[Groups(groups: ['article:read', 'admin:read'])]
     private Collection $offres;
 
     public function __construct()
