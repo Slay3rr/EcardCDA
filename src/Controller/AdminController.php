@@ -242,16 +242,15 @@ public function createArticle(Request $request, EntityManagerInterface $entityMa
             }
         ]);
     }
-    #[Route('/offres/{id}', name: 'admin_offer_delete', methods: ['DELETE'])]
-public function deleteOffer(Offre $offre): JsonResponse
-{
-    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    #[Route('/offre/{id}', name: 'admin_offer_delete', methods: ['DELETE'])]
+    public function deleteOffer(Offre $offre): JsonResponse
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-    $this->entityManager->remove($offre);
-    $this->entityManager->flush();
+        $this->entityManager->remove($offre);
+        $this->entityManager->flush();
 
-    return $this->json(null, 204);
-}
-
+        return $this->json(null, 204);
+    }
     
 }
