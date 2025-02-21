@@ -242,7 +242,7 @@ public function createArticle(Request $request, EntityManagerInterface $entityMa
             }
         ]);
     }
-    #[Route('/offre/{id}/delete', name: 'admin_offer_delete', methods: ['POST'])]
+    #[Route('/offre/{id}', name: 'admin_offer_delete', methods: ['DELETE'])]
     public function adminDelete(Offre $offre): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
