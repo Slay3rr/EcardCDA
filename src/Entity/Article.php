@@ -41,7 +41,7 @@ class Article
     /**
      * @var Collection<int, Offre>
      */
-    #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'article')]
+    #[ORM\OneToMany(targetEntity: Offre::class, mappedBy: 'article',cascade: ['remove'], orphanRemoval: true)]
     #[Groups(groups: ['article:read', 'admin:read'])]
     private Collection $offres;
 
