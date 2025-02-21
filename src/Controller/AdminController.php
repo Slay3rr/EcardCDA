@@ -242,15 +242,20 @@ public function createArticle(Request $request, EntityManagerInterface $entityMa
             }
         ]);
     }
-    #[Route('/offre/{id}', name: 'admin_offer_delete', methods: ['DELETE'])]
-    public function deleteOffer(Offre $offre): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    #[Route('/articles/{articleId}/offres/{id}', name: 'admin_offer_delete', methods: ['DELETE'])]
+        public function deleteOffer(int $articleId, Offre $offre): JsonResponse
+        {
+            $this->denyAccessUnlessGranted('ROLE_ADMIN');
 
-        $this->entityManager->remove($offre);
-        $this->entityManager->flush();
+            // Vérifier que l'offre appartient bien à l'article
+            if ($offre->getArticle()->getId() !== $articleId) {
+                return $this->json(['message' => 'Cette offre n\'appartient pas à cet article'], 404);
+            }
 
-        return $this->json(null, 204);
-    }
+            $this->entityManager->remove($offre);
+            $this->entityManager->flush();
+
+            return $this->json(null, 204);
+        }
     
 }
