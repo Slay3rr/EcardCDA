@@ -14,7 +14,16 @@ pipeline {
                 sh "git clone -b ${GIT_BRANCH} ${GIT_REPO} ${DEPLOY_DIR}"
             }
         }
- 
+        stage('Installation MongoDB') {
+                steps {
+                    sh '''
+                    apt-get update
+                    apt-get install -y php8.3-mongodb
+                    phpenmod mongodb
+                    systemctl restart php8.3-fpm
+                    '''
+                }
+            }
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
