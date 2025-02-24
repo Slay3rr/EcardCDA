@@ -18,10 +18,10 @@ pipeline {
         stage('Installation des prérequis') {
             steps {
                 sh '''
-                    sudo apt-get update
-                    sudo apt-get install -y php8.3-mongodb
-                    sudo phpenmod mongodb
-                    sudo systemctl restart php8.3-fpm
+                    apt-get update
+                    apt-get install -y php8.3-mongodb
+                    phpenmod mongodb
+                    systemctl restart php8.3-fpm
                 '''
             }
         }
