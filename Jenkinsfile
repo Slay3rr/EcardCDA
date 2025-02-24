@@ -5,6 +5,7 @@ pipeline {
         GIT_REPO = "https://github.com/Slay3rr/EcardCDA.git"
         GIT_BRANCH = "main"
         DEPLOY_DIR = "web006"
+        MONGODB_CREDS = credentials('mongodb-atlas-uri')
     }
 
     stages {
@@ -17,7 +18,7 @@ pipeline {
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
-                    sh 'composer install --optimize-autoloader --ignore-platform-req=ext-mongodb'
+                    sh 'composer install --optimize-autoloader'
                 }
             }
         }
@@ -42,7 +43,7 @@ APP_DEBUG=1
 DATABASE_URL=mysql://root:routitop@127.0.0.1:3306/${DEPLOY_DIR}?serverVersion=8.3.0&charset=utf8mb4
 
 # MongoDB Atlas Configuration
-MONGODB_URL=${MONGODB_CREDENTIALS}
+MONGODB_URL=mongodb+srv://root:root@cluster0.mongodb.net/?retryWrites=true&w=majority
 MONGODB_DB=images
 
 # Configuration JWT
