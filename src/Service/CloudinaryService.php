@@ -3,18 +3,19 @@
 namespace App\Service;
 
 use Cloudinary\Cloudinary;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class CloudinaryService
 {
     private $cloudinary;
 
-    public function __construct()
+    public function __construct(ParameterBagInterface $params)
     {
         $this->cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => 'dienxmy6h',
-                'api_key' => '344731258574875',
-                'api_secret' => 'gRJckNUdrguzXpj_KZpH59J_U2w'
+                'cloud_name' => $params->get('cloudinary.cloud_name'),
+                'api_key' => $params->get('cloudinary.api_key'),
+                'api_secret' => $params->get('cloudinary.api_secret')
             ]
         ]);
     }
@@ -22,13 +23,23 @@ class CloudinaryService
     public function uploadImage($file)
     {
         try {
-            $result = $this->cloudinary->uploadApi()->upload($file);
+            $result = $this->cloudinary->uploadApi()->upload($file, [
+                'folder' => 'ecard',
+                'resource_type' => 'auto'
+            ]);
+            
+            // Log pour debug
+            dump('Cloudinary Response:', $result);
+            
             return [
                 'success' => true,
                 'url' => $result['secure_url'],
                 'public_id' => $result['public_id']
             ];
         } catch (\Exception $e) {
+            // Log pour debug
+            dump('Cloudinary Error:', $e->getMessage());
+            
             return [
                 'success' => false,
                 'error' => $e->getMessage()

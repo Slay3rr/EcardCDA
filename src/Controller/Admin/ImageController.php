@@ -19,43 +19,72 @@ class ImageController extends AbstractController
     ) {}
 
     #[Route('/upload-image', name: 'admin_upload_image', methods: ['POST'])]
-public function uploadImage(Request $request): Response
-{
-    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    public function uploadImage(Request $request): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        $file = $request->files->get('image');
+        $cardName = $request->request->get('cardName');
+        $type = $request->request->get('type');
     
-    $file = $request->files->get('image');
-    $cardName = $request->request->get('cardName');
-    $type = $request->request->get('type');
-
-    // Ajoute ces lignes pour débugger
-    if (!$file) {
-        return $this->json(['error' => 'No file uploaded'], 400);
-    }
-
-    // Log des données reçues
-    $debug = [
-        'cardName received' => $cardName,
-        'type received' => $type
-    ];
-
-    $result = $this->cloudinaryService->uploadImage($file->getPathname());
-    if (!$result['success']) {
-        return $this->json($result + ['debug' => $debug], 500);
-    }
-
-    // Sauvegarde dans MongoDB
-    $cardImage = new CardImage();
-    $cardImage->setPublicId($result['public_id']);
-    $cardImage->setUrl($result['url']);
-    $cardImage->setCardName($cardName ?? 'default');
-    $cardImage->setType($type ?? 'default');
+        // Debug logs
+        dump('Request Files:', $request->files->all());
+        dump('Request Data:', $request->request->all());
     
-    $this->documentManager->persist($cardImage);
-    $this->documentManager->flush();
-
-    return $this->json($result + ['debug' => $debug]);
-}
-#[Route('/images', name: 'admin_list_images', methods: ['GET'])]
+        if (!$file) {
+            return $this->json(['error' => 'No file uploaded'], 400);
+        }
+    
+        $debug = [
+            'file_info' => [
+                'name' => $file->getClientOriginalName(),
+                'type' => $file->getMimeType(),
+                'size' => $file->getSize(),
+                'path' => $file->getPathname()
+            ],
+            'cardName' => $cardName,
+            'type' => $type
+        ];
+    
+        try {
+            $result = $this->cloudinaryService->uploadImage($file->getPathname());
+            if (!$result['success']) {
+                return $this->json([
+                    'error' => 'Upload to Cloudinary failed',
+                    'details' => $result['error'],
+                    'debug' => $debug
+                ], 500);
+            }
+    
+            $cardImage = new CardImage();
+            $cardImage->setPublicId($result['public_id']);
+            $cardImage->setUrl($result['url']);
+            $cardImage->setCardName($cardName ?? 'default');
+            $cardImage->setType($type ?? 'default');
+            
+            $this->documentManager->persist($cardImage);
+            $this->documentManager->flush();
+    
+            return $this->json([
+                'success' => true,
+                'image' => [
+                    'id' => $cardImage->getId(),
+                    'url' => $result['url'],
+                    'public_id' => $result['public_id'],
+                    'cardName' => $cardImage->getCardName(),
+                    'type' => $cardImage->getType()
+                ],
+                'debug' => $debug
+            ]);
+        } catch (\Exception $e) {
+            dump('Error:', $e->getMessage());
+            return $this->json([
+                'error' => 'Upload failed',
+                'message' => $e->getMessage(),
+                'debug' => $debug
+            ], 500);
+        }
+    }#[Route('/images', name: 'admin_list_images', methods: ['GET'])]
 public function listImages(): Response
 {
     $this->denyAccessUnlessGranted('ROLE_ADMIN');

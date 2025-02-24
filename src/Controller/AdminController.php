@@ -18,6 +18,10 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Form\ArticleType;
+use App\Service\CloudinaryService;
+use App\Document\CardImage;
+use Doctrine\ODM\MongoDB\DocumentManager;
+
 
 #[Route('/api/admin')]
 class AdminController extends AbstractController
@@ -29,6 +33,8 @@ class AdminController extends AbstractController
         private OffreRepository $offreRepository,
         private UserRepository $userRepository,
         private SerializerInterface $serializer,
+        private CloudinaryService $cloudinaryService
+
 
     ) {}
     #[Route('/articles/categories', name: 'api_admin_categories_list', methods: ['GET'])]
@@ -105,34 +111,35 @@ class AdminController extends AbstractController
 
     #[Route('/articles/{id}', name: 'admin_article_show', methods: ['GET'])]
     public function showArticle(int $id): JsonResponse
-{
-    $this->denyAccessUnlessGranted('ROLE_ADMIN');
-    
-    $article = $this->articleRepository->find($id);
-    if (!$article) {
-        return $this->json(['message' => 'Article non trouvé'], 404);
-    }
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
+        $article = $this->articleRepository->find($id);
+        if (!$article) {
+            return $this->json(['message' => 'Article non trouvé'], 404);
+        }
 
-    return $this->json($article, 200, [], ['groups' => ['admin:read']]);
-}
-#[Route('/articles', name: 'admin_article_create', methods: ['POST'])]
-public function createArticle(Request $request, EntityManagerInterface $entityManager): JsonResponse
+        return $this->json($article, 200, [], ['groups' => ['admin:read']]);
+    }
+    #[Route('/articles', name: 'admin_article_create', methods: ['POST'])]
+public function createArticle(Request $request): JsonResponse
 {
     try {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
         
         $data = json_decode($request->getContent(), true);
         
-        // Transformer Category en tableau simple
-        if (isset($data['Category'])) {
+        // Créer l'article
+        $article = new Article();
+        $form = $this->createForm(ArticleType::class, $article);
+        
+        // Transformer Category en tableau si nécessaire
+        if (isset($data['Category']) && !is_array($data['Category'])) {
             $data['Category'] = [$data['Category']];
         }
         
-        $article = new Article();
-        $form = $this->createForm(ArticleType::class, $article);
         $form->submit($data);
 
-        // Vérification des erreurs de formulaire
         if (!$form->isValid()) {
             $errors = [];
             foreach ($form->getErrors(true) as $error) {
@@ -144,68 +151,23 @@ public function createArticle(Request $request, EntityManagerInterface $entityMa
             return $this->json(['errors' => $errors], 400);
         }
 
-        // Sauvegarde en base de données
-        $entityManager->persist($article);
-        $entityManager->flush();
-
-        // Préparation des catégories pour la réponse
-        $categories = [];
-        foreach ($article->getCategory() as $cat) {
-            $categories[] = [
-                'id' => $cat->getId(),
-                'name' => $cat->getName()
-            ];
+        // Récupérer l'ID de l'image sélectionnée
+        if (isset($data['imageId'])) {
+            $article->setImageId($data['imageId']);
         }
 
-        // Réponse de succès
-        return $this->json([
-            'message' => 'Article créé avec succès',
-            'article' => [
-                'id' => $article->getId(),
-                'titre' => $article->getTitre(),
-                'content' => $article->getContent(),
-                'price' => $article->getPrice(),
-                'categories' => $categories
-            ]
-        ], 201);
+        $this->entityManager->persist($article);
+        $this->entityManager->flush();
+
+        return $this->json($article, 201, [], ['groups' => ['admin:read']]);
         
     } catch (\Exception $e) {
         return $this->json([
-            'error' => 'Erreur serveur',
-            'message' => $e->getMessage(),
-            'data' => $data ?? null
+            'error' => 'Erreur lors de la création de l\'article',
+            'message' => $e->getMessage()
         ], 500);
     }
-}    #[Route('/articles/{id}', name: 'admin_article_update', methods: ['PUT'])]
-    public function updateArticle(int $id, Request $request): JsonResponse
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
-        $article = $this->articleRepository->find($id);
-        if (!$article) {
-            return $this->json(['message' => 'Article non trouvé'], 404);
-        }
-
-        $form = $this->createForm(ArticleType::class, $article);
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
-
-        if ($form->isValid()) {
-            $this->entityManager->flush();
-            return $this->json($article, 200, [], ['groups' => ['admin:read']]);
-        }
-
-        // Récupération des erreurs de validation
-        $errors = [];
-        foreach ($form->getErrors(true) as $error) {
-            $errors[] = [
-                'field' => $error->getOrigin()->getName(),
-                'message' => $error->getMessage()
-            ];
-        }
-
-        return $this->json(['errors' => $errors], 400);
-    }
+}
 
     #[Route('/articles/{id}', name: 'admin_article_delete', methods: ['DELETE'])]
     public function deleteArticle(int $id): JsonResponse

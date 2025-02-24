@@ -25,6 +25,9 @@ class Article
     #[ORM\Column(length: 255)]
     #[Groups(['article:read', 'admin:read'])]
     private ?string $content = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['article:read', 'admin:read'])]
+    private ?string $imageId = null;
 
 
     /**
@@ -153,4 +156,14 @@ class Article
         return $this;
     }
     
+    public function getImageId(): ?string
+    {
+        return $this->imageId;
+    }
+
+    public function setImageId(?string $imageId): self
+    {
+        $this->imageId = $imageId;
+        return $this;
+    }
 }
