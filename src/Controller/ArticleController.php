@@ -104,6 +104,4 @@ public function search(Request $request, ArticleRepository $articleRepository, C
         'categories' => $categoryRepository->findAll(),
     ]);
 }
-
-
 }
