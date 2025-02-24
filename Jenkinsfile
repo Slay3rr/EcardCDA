@@ -14,16 +14,6 @@ pipeline {
                 sh "git clone -b ${GIT_BRANCH} ${GIT_REPO} ${DEPLOY_DIR}"
             }
         }
-        stage('Installation MongoDB') {
-                steps {
-                    sh '''
-                    apt-get update
-                    apt-get install -y php8.3-mongodb
-                    phpenmod mongodb
-                    systemctl restart php8.3-fpm
-                    '''
-                }
-            }
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
@@ -49,6 +39,10 @@ pipeline {
 APP_ENV=prod
 APP_DEBUG=1
 DATABASE_URL=mysql://root:routitop@127.0.0.1:3306/${DEPLOY_DIR}?serverVersion=8.3.0&charset=utf8mb4
+
+# MongoDB Atlas Configuration
+MONGODB_URL=${MONGODB_CREDENTIALS}
+MONGODB_DB=images
 
 # Configuration JWT
 JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem

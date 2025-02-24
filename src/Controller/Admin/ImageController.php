@@ -55,17 +55,26 @@ public function uploadImage(Request $request): Response
 
     return $this->json($result + ['debug' => $debug]);
 }
-    #[Route('/images', name: 'admin_list_images', methods: ['GET'])]
-    public function listImages(): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
+#[Route('/images', name: 'admin_list_images', methods: ['GET'])]
+public function listImages(): Response
+{
+    $this->denyAccessUnlessGranted('ROLE_ADMIN');
+    
+    try {
         $images = $this->documentManager
             ->getRepository(CardImage::class)
             ->findAll();
 
         return $this->json($images);
+    } catch (\Exception $e) {
+        return $this->json([
+            'error' => true,
+            'message' => $e->getMessage(),
+            'file' => $e->getFile(),
+            'line' => $e->getLine()
+        ], 500);
     }
+}
     #[Route('/images/{id}', name: 'admin_edit_image', methods: ['PATCH'])]
     public function editImage(string $id, Request $request): Response
     {
