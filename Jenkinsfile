@@ -5,7 +5,6 @@ pipeline {
         GIT_REPO = "https://github.com/Slay3rr/EcardCDA.git"
         GIT_BRANCH = "main"
         DEPLOY_DIR = "web006"
-        MONGODB_CREDS = credentials('mongodb-atlas-uri')
     }
 
     stages {
