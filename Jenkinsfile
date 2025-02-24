@@ -14,7 +14,17 @@ pipeline {
                 sh "git clone -b ${GIT_BRANCH} ${GIT_REPO} ${DEPLOY_DIR}"
             }
         }
- 
+
+        stage('Installation des prérequis') {
+            steps {
+                sh '''
+                    apt-get update
+                    apt-get install -y php8.3-mongodb
+                    phpenmod mongodb
+                '''
+            }
+        }  // Cette accolade manquait
+
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
@@ -47,7 +57,7 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
 # Configuration CORS
-CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\\$'
+CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\\\$'
 """.stripIndent()
 
                     writeFile file: "${DEPLOY_DIR}/.env.local", text: envLocal
