@@ -18,13 +18,14 @@ pipeline {
         stage('Installation des prérequis') {
             steps {
                 sh '''
-                    apt-get update
-                    apt-get install -y php8.3-mongodb
-                    phpenmod mongodb
+                    sudo apt-get update
+                    sudo apt-get install -y php8.3-mongodb
+                    sudo phpenmod mongodb
+                    sudo systemctl restart php8.3-fpm
                 '''
             }
-        }  // Cette accolade manquait
-
+        }
+ 
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
