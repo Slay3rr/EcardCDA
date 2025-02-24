@@ -53,11 +53,17 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
+    "suggest": {
+        "ext-mongodb": "Required for MongoDB support"
+    },
     "config": {
         "allow-plugins": {
             "php-http/discovery": true,
             "symfony/flex": true,
             "symfony/runtime": true
+        },
+        "platform": {
+            "ext-mongodb": "1.17.0"
         },
         "bump-after-update": true,
         "sort-packages": true

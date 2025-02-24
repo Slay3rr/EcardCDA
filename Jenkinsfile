@@ -10,14 +10,15 @@ pipeline {
     stages {
         stage('Cloner le dépôt') { 
             steps {
-                sh "rm -rf ${DEPLOY_DIR}" // Nettoyage du précédent build
+                sh "rm -rf ${DEPLOY_DIR}"
                 sh "git clone -b ${GIT_BRANCH} ${GIT_REPO} ${DEPLOY_DIR}"
             }
         }
         stage('Installation des dépendances') {
             steps {
                 dir("${DEPLOY_DIR}") {
-                    sh 'composer install --optimize-autoloader'
+                    // Ajouté --ignore-platform-req=ext-mongodb
+                    sh 'composer install --optimize-autoloader --ignore-platform-req=ext-mongodb'
                 }
             }
         }
@@ -50,7 +51,7 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
 # Configuration CORS
-CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\\$'
+CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\$'
 """.stripIndent()
 
                     writeFile file: "${DEPLOY_DIR}/.env.local", text: envLocal
@@ -78,8 +79,8 @@ CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\
 
         stage('Déploiement') {
             steps {
-                sh "rm -rf /var/www/html/${DEPLOY_DIR}" // Supprime le dossier de destination
-                sh "mkdir /var/www/html/${DEPLOY_DIR}" // Recréé le dossier de destination
+                sh "rm -rf /var/www/html/${DEPLOY_DIR}"
+                sh "mkdir /var/www/html/${DEPLOY_DIR}"
                 sh "cp -rT ${DEPLOY_DIR} /var/www/html/${DEPLOY_DIR}"
                 sh "chmod -R 775 /var/www/html/${DEPLOY_DIR}/var"
             }
