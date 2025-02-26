@@ -9,13 +9,13 @@ class CloudinaryService
 {
     private $cloudinary;
 
-    public function __construct(ParameterBagInterface $params)
+    public function __construct()
     {
         $this->cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => $params->get('cloudinary.cloud_name'),
-                'api_key' => $params->get('cloudinary.api_key'),
-                'api_secret' => $params->get('cloudinary.api_secret')
+                'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'],
+                'api_key' => $_ENV['CLOUDINARY_API_KEY'],
+                'api_secret' => $_ENV['CLOUDINARY_API_SECRET']
             ]
         ]);
     }
