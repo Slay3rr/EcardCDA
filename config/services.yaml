@@ -6,6 +6,9 @@
 parameters:
     env(MONGODB_URL): ''
     env(MONGODB_DB): ''
+    cloudinary.cloud_name: '%env(CLOUDINARY_CLOUD_NAME)%'
+    cloudinary.api_key: '%env(CLOUDINARY_API_KEY)%'
+    cloudinary.api_secret: '%env(CLOUDINARY_API_SECRET)%'
 
 services:
     # default configuration for services in *this* file

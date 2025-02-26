@@ -9,13 +9,22 @@ class CloudinaryService
 {
     private $cloudinary;
 
-    public function __construct()
+    public function __construct(ParameterBagInterface $params)
     {
+        // Récupérer les variables d'environnement avec getenv() ou via ParameterBagInterface
+        $cloudName = getenv('CLOUDINARY_CLOUD_NAME') ?: $params->get('cloudinary.cloud_name');
+        $apiKey = getenv('CLOUDINARY_API_KEY') ?: $params->get('cloudinary.api_key');
+        $apiSecret = getenv('CLOUDINARY_API_SECRET') ?: $params->get('cloudinary.api_secret');
+
+        if (!$cloudName || !$apiKey || !$apiSecret) {
+            throw new \RuntimeException('Les paramètres Cloudinary sont manquants. Vérifiez votre configuration.');
+        }
+
         $this->cloudinary = new Cloudinary([
             'cloud' => [
-                'cloud_name' => $_ENV['CLOUDINARY_CLOUD_NAME'],
-                'api_key' => $_ENV['CLOUDINARY_API_KEY'],
-                'api_secret' => $_ENV['CLOUDINARY_API_SECRET']
+                'cloud_name' => $cloudName,
+                'api_key' => $apiKey,
+                'api_secret' => $apiSecret
             ]
         ]);
     }

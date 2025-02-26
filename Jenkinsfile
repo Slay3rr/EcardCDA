@@ -28,7 +28,6 @@ pipeline {
                     sh 'mkdir -p config/jwt'
                     sh 'php bin/console lexik:jwt:generate-keypair --skip-if-exists --env=prod'
                     sh 'chmod -R 644 config/jwt/*'
-
                 }
             }
         }
@@ -51,7 +50,15 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
 # Configuration CORS
-CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\\$'
+CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\$'
+
+# Configuration Cloudinary
+CLOUDINARY_CLOUD_NAME=dienxmy6h
+CLOUDINARY_API_KEY=344731258574875
+CLOUDINARY_API_SECRET=gRJckNUdrguzXpj_KZpH59J_U2w
+
+# Configuration supplémentaire pour Cloudinary (URL complète)
+CLOUDINARY_URL=cloudinary://344731258574875:gRJckNUdrguzXpj_KZpH59J_U2w@dienxmy6h
 """.stripIndent()
 
                     writeFile file: "${DEPLOY_DIR}/.env.local", text: envLocal
