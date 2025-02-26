@@ -50,7 +50,7 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
 # Configuration CORS
-CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\$'
+CORS_ALLOW_ORIGIN='^https?://(localhost|127\\\\.0\\\\.0\\\\.1|web006\\\\.azure\\\\.certif\\\\.academy)(:[0-9]+)?\\\\\\$'
 
 # Configuration Cloudinary
 CLOUDINARY_CLOUD_NAME=dienxmy6h
