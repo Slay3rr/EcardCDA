@@ -19,17 +19,20 @@ class ArticleController extends AbstractController
 {
     // Liste des articles publics (accessible à tous)
     #[Route('/articles', name: 'public_articles', methods: ['GET'])]
-    public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
-    {
-        $articles = $articleRepository->findBy([], ['id' => 'DESC']);
-        $categories = $categoryRepository->findAll();
-
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles,
-            'categories' => $categories
-        ]);
+public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+{
+    $articles = $articleRepository->findBy([], ['id' => 'DESC']);
+    
+    // Ajoutez ce dump pour déboguer
+    foreach ($articles as $article) {
+        dump($article->getImageId());
     }
-
+    
+    return $this->render('article/index.html.twig', [
+        'articles' => $articles,
+        'categories' => $categoryRepository->findAll()
+    ]);
+}
     #[Route('/article/{id}', name: 'public_article_show')]
     public function publicShow(Article $article): Response
     {

@@ -32,10 +32,12 @@
         <tr>
             <td>{{ article.Titre }}</td>
             <td>
-                <img src="{{ article.imageId ?? asset('images/placeholder.jpg') }}" 
-                     alt="{{ article.Titre }}"
-                     style="max-width: 100px;">
-            </td>
+    {# Ajoutez ce dump pour voir l'URL #}
+    {{ dump(article.imageId) }}
+    <img src="{{ article.imageId ?? asset('images/placeholder.jpg') }}" 
+         alt="{{ article.Titre }}"
+         style="max-width: 100px;">
+</td>
             <td>{{ article.price }} €</td>
             <td>
                 {% for category in article.Category %}
