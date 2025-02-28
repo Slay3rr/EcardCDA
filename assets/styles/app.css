@@ -3,13 +3,10 @@ body {
 }
 /* Style pour les cartes */
 .card-trading {
-    transition: transform 0.2s ease-in-out;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
-    border: none;
-    margin-bottom: 20px;
+    height: 400px; /* Hauteur fixe pour toutes les cartes */
+    width: 100%;   /* Largeur responsive */
+    max-width: 300px; /* Largeur maximale */
+    margin: 0 auto; /* Centre la carte */
 }
 
 .card-trading:hover {
@@ -18,9 +15,11 @@ body {
 }
 
 .card-trading img {
-    height: 280px;
-    object-fit: cover;
-    border-bottom: 2px solid #eee;
+    height: 200px;  /* Hauteur fixe plus petite */
+    width: 100%;    /* Largeur à 100% de son conteneur */
+    object-fit: contain; /* 'contain' au lieu de 'cover' pour voir l'image entière */
+    padding: 10px;  /* Ajoute un peu d'espace autour de l'image */
+    background-color: #f8f9fa; /* Fond clair pour les images */
 }
 
 /* Style pour les sections */
@@ -84,4 +83,9 @@ body {
 .badge-trending {
     background: linear-gradient(45deg, #e74c3c, #f1c40f);
     color: white;
+}
+
+.card-body {
+    padding: 1rem;
+    overflow: hidden; /* Cache le texte qui déborde */
 }
