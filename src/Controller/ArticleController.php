@@ -11,36 +11,67 @@ use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ODM\MongoDB\DocumentManager;
+use App\Document\CardImage;
 
 
 
 
 class ArticleController extends AbstractController
 {
+    private $documentManager;
+
+    public function __construct(DocumentManager $documentManager)
+    {
+        $this->documentManager = $documentManager;
+    }
     // Liste des articles publics (accessible à tous)
     #[Route('/articles', name: 'public_articles', methods: ['GET'])]
-public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
-{
-    $articles = $articleRepository->findBy([], ['id' => 'DESC']);
-    
-    // Ajoutez ce dump pour déboguer
-    foreach ($articles as $article) {
-        dump($article->getImageId());
+    public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+    {
+        $articles = $articleRepository->findBy([], ['id' => 'DESC']);
+        $categories = $categoryRepository->findAll();
+
+        // Récupérer les URLs des images depuis MongoDB
+        $imageUrls = [];
+        foreach ($articles as $article) {
+            if ($article->getImageId()) {
+                $cardImage = $this->documentManager
+                    ->getRepository(CardImage::class)
+                    ->find($article->getImageId());
+                
+                if ($cardImage) {
+                    $imageUrls[$article->getId()] = $cardImage->getUrl();
+                }
+            }
+        }
+
+        return $this->render('article/index.html.twig', [
+            'articles' => $articles,
+            'categories' => $categoryRepository->findAll(),
+            'imageUrls' => $imageUrls
+        ]);
     }
-    
-    return $this->render('article/index.html.twig', [
-        'articles' => $articles,
-        'categories' => $categoryRepository->findAll()
-    ]);
-}
+
     #[Route('/article/{id}', name: 'public_article_show')]
     public function publicShow(Article $article): Response
     {
+        $imageUrl = null;
+        if ($article->getImageId()) {
+            $cardImage = $this->documentManager
+                ->getRepository(CardImage::class)
+                ->find($article->getImageId());
+            
+            if ($cardImage) {
+                $imageUrl = $cardImage->getUrl();
+            }
+        }
+
         return $this->render('article/show.html.twig', [
-            'article' => $article
+            'article' => $article,
+            'imageUrl' => $imageUrl
         ]);
     }
-    
+
     #[Route('/articles/category', name: 'articles_by_category_search', methods: ['GET'])]
 public function articlesByCategorySearch(Request $request, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response
 {

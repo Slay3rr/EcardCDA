@@ -5,8 +5,11 @@
 {% block body %}
 <div class="row">
   <div class="col-12 col-md-4">
+{% if imageUrl %}
+    <img src="{{ imageUrl }}" class="img-fluid" alt="{{ article.Titre }}" />
+{% else %}
     <img src="{{ asset('images/placeholder.jpg') }}" class="img-fluid" alt="{{ article.Titre }}" />
-  </div>
+{% endif %}  </div>
   <div class="col-12 col-md-8">
     <h1>{{ article.Titre }}</h1>
     <p class="text-muted">{{ article.content }}</p>

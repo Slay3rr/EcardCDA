@@ -44,18 +44,10 @@
             </td>
            <td>
            <td>
-    {# Dump complet de l'article pour voir toutes les données #}
-    {{ dump(article) }}
-    
-    {# Affiche l'URL brute en texte pour vérification #}
-    <p>URL de l'image : {{ article.imageId }}</p>
-    
-    {# Image avec condition plus explicite #}
-    {% if article.imageId %}
-        <img src="{{ article.imageId }}" 
+    {% if imageUrls[article.id] is defined %}
+        <img src="{{ imageUrls[article.id] }}" 
              alt="{{ article.Titre }}"
-             style="max-width: 100px;"
-             onerror="this.src='{{ asset('images/placeholder.jpg') }}'; console.log('Erreur de chargement pour l\'image : ' + this.src);">
+             style="max-width: 100px;">
     {% else %}
         <img src="{{ asset('images/placeholder.jpg') }}" 
              alt="Image par défaut"
