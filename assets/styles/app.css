@@ -89,7 +89,6 @@ body {
     padding: 1rem;
     overflow: hidden; /* Cache le texte qui déborde */
 }
-/* Style du carousel */
 .carousel-inner {
     width: 95%;
     margin: 0 auto;
@@ -98,52 +97,81 @@ body {
 }
 
 .carousel-item {
-    height: 400px;
+    height: 500px; /* Un peu plus grand */
 }
 
-/* Style personnalisé pour la caption */
-.custom-caption {
+/* Style de la boîte de titre du carousel */
+.carousel-caption {
     position: absolute;
-    bottom: 80px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
+    bottom: 70px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.carousel-caption h2 {
+    background: rgba(0, 0, 0, 0.8);
     padding: 15px 30px;
     border-radius: 10px;
-    z-index: 10;
-}
-
-.custom-caption h2 {
     color: white;
-    margin: 0;
     font-size: 1.8rem;
+    margin: 0;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Style des séparateurs de section */
+.section-divider {
+    position: relative;
+    height: 120px;
+    margin: 50px 0;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../images/section-bg.jpg') center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.section-divider::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+}
+
+.section-content {
+    position: relative;
+    z-index: 2;
     text-align: center;
-    white-space: nowrap;
+    color: white;
+    padding: 20px;
 }
 
-/* Style des indicateurs */
-.carousel-indicators {
-    bottom: 20px;
+.section-content h2 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.carousel-indicators button {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: none;
-    margin: 0 5px;
+.section-btn {
+    background: transparent;
+    border: 2px solid white;
+    color: white;
+    padding: 8px 25px;
+    border-radius: 25px;
     transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 10px;
 }
 
-.carousel-indicators button.active {
-    background-color: white;
-    transform: scale(1.2);
-}
-
-/* Style des contrôles */
-.carousel-control-prev,
-.carousel-control-next {
-    width: 5%;
+.section-btn:hover {
+    background: white;
+    color: #000;
+    transform: translateY(-2px);
 }
