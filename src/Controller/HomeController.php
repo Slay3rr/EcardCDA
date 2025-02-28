@@ -35,7 +35,7 @@ class HomeController extends AbstractController
         return $imageUrls;
     }
 
-    #[Route('/', name: 'app_home')]
+    #[Route('/', name: 'home')]
     public function index(ArticleRepository $articleRepository): Response
     {
         // Récupération des articles
