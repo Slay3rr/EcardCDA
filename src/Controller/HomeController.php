@@ -48,7 +48,7 @@ class HomeController extends AbstractController
         $nouveautesImages = $this->getImagesForArticles($nouveautes);
         $tendancesImages = $this->getImagesForArticles($tendances);
 
-        return $this->render('home/home.html.twig', [
+        return $this->render('home/home_page.html.twig', [
             'bestSellers' => $bestSellers,
             'nouveautes' => $nouveautes,
             'tendances' => $tendances,
