@@ -5,17 +5,17 @@
 {% block body %}
 <div class="row">
   <div class="col-12 col-md-4">
-{% if imageUrl %}
-    <img src="{{ imageUrl }}" class="img-fluid" alt="{{ article.Titre }}" />
-{% else %}
-    <img src="{{ asset('images/placeholder.jpg') }}" class="img-fluid" alt="{{ article.Titre }}" />
-{% endif %}  </div>
+    {% if imageUrl %}
+        <img src="{{ imageUrl }}" class="img-fluid" alt="{{ article.Titre }}" />
+    {% else %}
+        <img src="{{ asset('images/placeholder.jpg') }}" class="img-fluid" alt="{{ article.Titre }}" />
+    {% endif %}
+  </div>
   <div class="col-12 col-md-8">
     <h1>{{ article.Titre }}</h1>
     <p class="text-muted">{{ article.content }}</p>
     <p class="fw-bold">{{ article.price }} €</p>
 
-    {# Bouton pour ajouter une offre par un utilisateur connecté #}
     {% if is_granted('ROLE_USER') %}
       <a href="{{ path('add_offer', { 'id': article.id }) }}" class="btn btn-warning mb-3">
         Ajouter une offre
@@ -53,13 +53,6 @@
                   <input type="hidden" name="_method" value="DELETE">
                   <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
                     Supprimer
-                  </button>
-                </form>
-              {% elseif is_granted('ROLE_ADMIN') %}
-                <form action="{{ path('admin_offer_delete', { id: offre.id }) }}" method="post" class="d-inline-block">
-                  <input type="hidden" name="_method" value="DELETE">
-                  <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette offre ?');">
-                    Supprimer l'offre
                   </button>
                 </form>
               {% else %}
