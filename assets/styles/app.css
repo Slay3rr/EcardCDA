@@ -89,3 +89,37 @@ body {
     padding: 1rem;
     overflow: hidden; /* Cache le texte qui déborde */
 }
+
+/* Style du carousel */
+.carousel-inner {
+    height: 500px;
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    height: 100%;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
+    border-radius: 10px;
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: auto;
+    bottom: 50%;
+    transform: translateY(50%);
+    left: 10%;
+    right: 10%;
+}
+
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 5px;
+}
