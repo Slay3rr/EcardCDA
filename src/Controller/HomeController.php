@@ -1,31 +1,60 @@
 <?php
-// src/Controller/HomeController.php
+
 namespace App\Controller;
 
 use App\Repository\ArticleRepository;
-use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\ODM\MongoDB\DocumentManager;
+use App\Document\CardImage;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home')]
-    public function index(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
+    private $documentManager;
+
+    public function __construct(DocumentManager $documentManager)
     {
-        // Récupérer tous les articles triés par ID décroissant (on suppose que l'ID décroissant correspond aux nouveautés)
-        $articles = $articleRepository->findBy([], ['id' => 'DESC']);
+        $this->documentManager = $documentManager;
+    }
 
-        // Simuler les différentes sections (à ajuster selon vos critères réels)
-        $bestSellers = array_slice($articles, 0, 3);
-        $nouveautes  = array_slice($articles, 3, 5);
-        $tendances   = array_slice($articles, 8, 3);
+    private function getImagesForArticles($articles): array
+    {
+        $imageUrls = [];
+        foreach ($articles as $article) {
+            if ($article->getImageId()) {
+                $cardImage = $this->documentManager
+                    ->getRepository(CardImage::class)
+                    ->find($article->getImageId());
+                
+                if ($cardImage) {
+                    $imageUrls[$article->getId()] = $cardImage->getUrl();
+                }
+            }
+        }
+        return $imageUrls;
+    }
 
-        return $this->render('home/home_page.html.twig', [
+    #[Route('/', name: 'app_home')]
+    public function index(ArticleRepository $articleRepository): Response
+    {
+        // Récupération des articles
+        $bestSellers = $articleRepository->findBy([], ['id' => 'DESC'], 3);
+        $nouveautes = $articleRepository->findBy([], ['id' => 'DESC'], 4);
+        $tendances = $articleRepository->findBy([], ['id' => 'DESC'], 3);
+
+        // Récupération des images pour chaque section
+        $bestSellersImages = $this->getImagesForArticles($bestSellers);
+        $nouveautesImages = $this->getImagesForArticles($nouveautes);
+        $tendancesImages = $this->getImagesForArticles($tendances);
+
+        return $this->render('home/home.html.twig', [
             'bestSellers' => $bestSellers,
-            'nouveautes'  => $nouveautes,
-            'tendances'   => $tendances,
-            'categories'  => $categoryRepository->findAll(),
+            'nouveautes' => $nouveautes,
+            'tendances' => $tendances,
+            'bestSellersImages' => $bestSellersImages,
+            'nouveautesImages' => $nouveautesImages,
+            'tendancesImages' => $tendancesImages,
         ]);
     }
 }

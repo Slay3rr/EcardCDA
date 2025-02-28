@@ -1,22 +1,15 @@
-{# templates/partials/_product_card.html.twig #}
-{% macro display(product) %}
-  <div class="card border-light shadow-sm h-100">
-    <img
-      src="{{ asset('images/placeholder.jpg') }}"
-      class="card-img-top"
-      alt="{{ product.Titre }}"
-    />
-    <div class="card-body">
-      <h5 class="card-title">{{ product.Titre }}</h5>
-      <p class="card-text text-muted mb-2">
-        {{ product.content|length > 70 ? product.content|slice(0,70) ~ '...' : product.content }}
-      </p>
-      {% if product.price is not null %}
-        <p class="card-text fw-bold">{{ product.price }} €</p>
-      {% endif %}
-      <a href="{{ path('public_article_show', {id: product.id}) }}" class="btn btn-primary">
-        Voir le détail
-      </a>
+{% macro display(article, imageUrl) %}
+    <div class="card h-100">
+        {% if imageUrl is defined and imageUrl %}
+            <img src="{{ imageUrl }}" class="card-img-top" alt="{{ article.Titre }}">
+        {% else %}
+            <img src="{{ asset('images/placeholder.jpg') }}" class="card-img-top" alt="{{ article.Titre }}">
+        {% endif %}
+        <div class="card-body">
+            <h5 class="card-title">{{ article.Titre }}</h5>
+            <p class="card-text">{{ article.content|length > 40 ? article.content|slice(0,40) ~ '...' : article.content }}</p>
+            <p class="card-text"><small class="text-muted">{{ article.price }} €</small></p>
+            <a href="{{ path('public_article_show', {id: article.id}) }}" class="btn btn-primary">Voir détails</a>
+        </div>
     </div>
-  </div>
 {% endmacro %}
