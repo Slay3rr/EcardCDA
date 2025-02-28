@@ -91,7 +91,7 @@ body {
 }
 /* Style du carousel */
 .carousel-inner {
-    width: 95%;  /* Augmentation de la largeur */
+    width: 95%;
     margin: 0 auto;
     border-radius: 15px;
     overflow: hidden;
@@ -101,29 +101,25 @@ body {
     height: 400px;
 }
 
-/* Style de la boîte de titre */
-.caption-container {
+/* Style personnalisé pour la caption */
+.custom-caption {
     position: absolute;
-    bottom: 60px;  /* Espace pour les indicateurs */
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.caption-box {
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     padding: 15px 30px;
     border-radius: 10px;
-    max-width: 80%;
+    z-index: 10;
 }
 
-.caption-box h2 {
+.custom-caption h2 {
     color: white;
     margin: 0;
     font-size: 1.8rem;
     text-align: center;
+    white-space: nowrap;
 }
 
 /* Style des indicateurs */
