@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ODM\MongoDB\DocumentManager;
 
 
 
@@ -21,23 +22,21 @@ class ArticleController extends AbstractController
     public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
         $articles = $articleRepository->findBy([], ['id' => 'DESC']);
-        $categories = $categoryRepository->findAll(); // Récupération des catégories
+        $categories = $categoryRepository->findAll();
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
-            'categories' => $categories, // Transmet les catégories à la vue
+            'categories' => $categories
         ]);
     }
 
-    // Affichage d'un article spécifique (accessible à tous)
     #[Route('/article/{id}', name: 'public_article_show')]
     public function publicShow(Article $article): Response
     {
         return $this->render('article/show.html.twig', [
-            'article' => $article,
+            'article' => $article
         ]);
     }
-
     
     #[Route('/articles/category', name: 'articles_by_category_search', methods: ['GET'])]
 public function articlesByCategorySearch(Request $request, CategoryRepository $categoryRepository, ArticleRepository $articleRepository): Response

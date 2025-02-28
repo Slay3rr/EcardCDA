@@ -50,10 +50,7 @@ JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
-CLOUDINARY_CLOUD_NAME=dienxmy6h
-CLOUDINARY_API_KEY=344731258574875
-CLOUDINARY_API_SECRET=gRJckNUdrguzXpj_KZpH59J_U2w
-CLOUDINARY_URL=cloudinary://344731258574875:gRJckNUdrguzXpj_KZpH59J_U2w@dienxmy6h
+
 
 # Configuration CORS
 CORS_ALLOW_ORIGIN='^https?://(localhost|127\\.0\\.0\\.1|web006\\.azure\\.certif\\.academy)(:[0-9]+)?\\\$'
