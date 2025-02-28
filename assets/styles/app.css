@@ -90,75 +90,35 @@ body {
     overflow: hidden; /* Cache le texte qui déborde */
 }
 
-/* Style du carousel */
-#homeCarousel {
-    width: 90%;
-    margin: 0 auto 3rem auto;
-}
-
 .carousel-inner {
-    border-radius: 15px;
-    overflow: hidden;
+    height: 500px;
 }
 
-/* Overlay et contenu */
-.carousel-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 0, 0, 0.3);
+.carousel-item {
+    height: 100%;
 }
 
-.carousel-content {
-    background: rgba(0, 0, 0, 0.7);
-    padding: 2rem;
+.carousel-item img {
+    object-fit: cover;
+    height: 100%;
+}
+
+.carousel-caption {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(3px);
     border-radius: 10px;
+    padding: 1.5rem;
     max-width: 600px;
-    text-align: center;
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin: auto;
+    bottom: 50%;
+    transform: translateY(50%);
+    left: 10%;
+    right: 10%;
 }
 
-.carousel-content h2 {
-    color: white;
-    margin: 0;
-    font-size: 2rem;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-/* Indicateurs (points) */
-.carousel-indicators {
-    margin-bottom: 1.5rem;
-}
-
-.carousel-indicators [data-bs-target] {
-    width: 12px;
-    height: 12px;
+.carousel-indicators button {
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.5);
-    border: none;
-    margin: 0 6px;
-    transition: all 0.3s ease;
-}
-
-.carousel-indicators .active {
-    background-color: white;
-    transform: scale(1.2);
-}
-
-/* Boutons de navigation */
-.carousel-control-prev,
-.carousel-control-next {
-    width: 5%;
-    opacity: 0.7;
-}
-
-.carousel-control-prev:hover,
-.carousel-control-next:hover {
-    opacity: 1;
+    margin: 0 5px;
 }
