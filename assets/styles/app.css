@@ -96,43 +96,43 @@ body {
     overflow: hidden;
 }
 
-.carousel-item {
-    height: 500px; /* Un peu plus grand */
-}
-
-/* Style de la boîte de titre du carousel */
 .carousel-caption {
     position: absolute;
-    bottom: 70px;
-    left: 0;
-    right: 0;
-    display: flex;
-    justify-content: center;
+    bottom: 80px;  /* Position en bas */
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: auto;
+    text-align: center;
+    padding: 0;
 }
 
-.carousel-caption h2 {
-    background: rgba(0, 0, 0, 0.8);
+.caption-box {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
     padding: 15px 30px;
     border-radius: 10px;
-    color: white;
-    font-size: 1.8rem;
-    margin: 0;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    display: inline-block;
 }
 
+.caption-box h2 {
+    color: white;
+    margin: 0;
+    font-size: 1.8rem;
+    white-space: nowrap;
+}
 /* Style des séparateurs de section */
 .section-divider {
     position: relative;
     height: 120px;
     margin: 50px 0;
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../images/section-bg.jpg') center/cover;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
 }
 
+/* Overlay commun */
 .section-divider::before {
     content: '';
     position: absolute;
@@ -141,6 +141,22 @@ body {
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
+}
+
+/* Images spécifiques pour chaque séparateur */
+.divider-bestsellers {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../assets/bg/bg1.jpg') center/cover;
+}
+
+.divider-nouveautes {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../assets/bg/bg2.jpg') center/cover;
+}
+
+.divider-tendances {
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                url('../assets/bg/bg4.jpg') center/cover;
 }
 
 .section-content {
@@ -174,4 +190,15 @@ body {
     background: white;
     color: #000;
     transform: translateY(-2px);
+    text-decoration: none;
+}
+
+/* Ajustement des sections */
+.section-wrapper {
+    padding: 40px 0;
+    position: relative;
+}
+
+.section-wrapper:nth-child(even) {
+    background-color: #f8f9fa;
 }
