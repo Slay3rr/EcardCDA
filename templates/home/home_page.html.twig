@@ -1,6 +1,9 @@
 {# templates/home/home.html.twig #}
 {% extends 'base.html.twig' %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/custom.css') }}">
+{% endblock %}
 {% block title %}Ecard{% endblock %}
 
 {% block body %}
@@ -38,42 +41,49 @@
 </div>
 
 <!-- Section Best Sellers -->
-<div class="container mb-5">
-    <h2 class="mb-4">Best Sellers</h2>
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        {% for article in bestSellers %}
-            <div class="col">
-                {% import 'partials/_product_card.html.twig' as product_card %}
-                {{ product_card.display(article, bestSellersImages[article.id] ?? null) }}
+<!-- Section Best Sellers -->
+    <section class="section-wrapper bg-light">
+        <div class="container">
+            <h2 class="section-title">Best Sellers</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for article in bestSellers %}
+                    <div class="col">
+                        {% import 'partials/_product_card.html.twig' as product_card %}
+                        {{ product_card.display(article, bestSellersImages[article.id] ?? null, 'badge-trending') }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-</div>
+        </div>
+    </section>
 
-<!-- Section Nouveautés -->
-<div class="container mb-5">
-    <h2 class="mb-4">Nouveautés</h2>
-    <div class="row row-cols-1 row-cols-md-4 g-4">
-        {% for article in nouveautes %}
-            <div class="col">
-                {% import 'partials/_product_card.html.twig' as product_card %}
-                {{ product_card.display(article, nouveautesImages[article.id] ?? null) }}
+    <!-- Section Nouveautés -->
+    <section class="section-wrapper">
+        <div class="container">
+            <h2 class="section-title">Nouveautés</h2>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                {% for article in nouveautes %}
+                    <div class="col">
+                        {% import 'partials/_product_card.html.twig' as product_card %}
+                        {{ product_card.display(article, nouveautesImages[article.id] ?? null, 'badge-new') }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-</div>
+        </div>
+    </section>
 
-<!-- Section Tendances -->
-<div class="container mb-5">
-    <h2 class="mb-4">Tendances</h2>
-    <div class="card-group">
-        {% for article in tendances %}
-            <div class="col">
-                {% import 'partials/_product_card.html.twig' as product_card %}
-                {{ product_card.display(article, tendancesImages[article.id] ?? null) }}
+    <!-- Section Tendances -->
+    <section class="section-wrapper bg-light">
+        <div class="container">
+            <h2 class="section-title">Tendances</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for article in tendances %}
+                    <div class="col">
+                        {% import 'partials/_product_card.html.twig' as product_card %}
+                        {{ product_card.display(article, tendancesImages[article.id] ?? null, 'badge-trending') }}
+                    </div>
+                {% endfor %}
             </div>
-        {% endfor %}
-    </div>
-</div>
+        </div>
+    </section>
 
 {% endblock %}
