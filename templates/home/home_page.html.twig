@@ -50,6 +50,18 @@
     </div>
 </div>
 
+<!-- Section Nouveautés -->
+<div class="container mb-5">
+    <h2 class="mb-4">Nouveautés</h2>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for article in nouveautes %}
+            <div class="col">
+                {% import 'partials/_product_card.html.twig' as product_card %}
+                {{ product_card.display(article, nouveautesImages[article.id] ?? null) }}
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
 <!-- Section Tendances -->
 <div class="container mb-5">
