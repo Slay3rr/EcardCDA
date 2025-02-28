@@ -43,6 +43,25 @@
                 {% endfor %}
             </td>
            <td>
+           <td>
+    {# Dump complet de l'article pour voir toutes les données #}
+    {{ dump(article) }}
+    
+    {# Affiche l'URL brute en texte pour vérification #}
+    <p>URL de l'image : {{ article.imageId }}</p>
+    
+    {# Image avec condition plus explicite #}
+    {% if article.imageId %}
+        <img src="{{ article.imageId }}" 
+             alt="{{ article.Titre }}"
+             style="max-width: 100px;"
+             onerror="this.src='{{ asset('images/placeholder.jpg') }}'; console.log('Erreur de chargement pour l\'image : ' + this.src);">
+    {% else %}
+        <img src="{{ asset('images/placeholder.jpg') }}" 
+             alt="Image par défaut"
+             style="max-width: 100px;">
+    {% endif %}
+</td>
   <a href="{{ path('public_article_show', {id: article.id}) }}" class="btn btn-info btn-sm">Voir</a>
   {% if is_granted('ROLE_USER') %}
       <a href="{{ path('add_offer', { 'id': article.id }) }}" class="btn btn-warning btn-sm mt-1">Ajouter une offre</a>
