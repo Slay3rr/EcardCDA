@@ -1,1 +1,0 @@
-(self.webpackChunk=self.webpackChunk||[]).push([[524],{28:(s,e,p)=>{"use strict";p(13);console.log("This log comes from assets/app.js - welcome to AssetMapper! 🎉")},13:()=>{startStimulusApp()}},s=>{var e;e=28,s(s.s=e)}]);
