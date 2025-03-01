@@ -168,18 +168,19 @@ body {
 /* Images spécifiques pour chaque séparateur */
 .divider-bestsellers {
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../../assets/images/bg/bg1.jpg') center/cover;
+                url('../images/bg/bg1.jpg') center/cover;
 }
 
 .divider-nouveautes {
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../../assets/images/bg/bg2.jpg') center/cover;
+                url('../images/bg/bg2.jpg') center/cover;
 }
 
 .divider-tendances {
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../../assets/images/bg/bg4.jpg') center/cover;
+                url('../images/bg/bg4.jpg') center/cover;
 }
+
 
 .section-content {
     position: relative;

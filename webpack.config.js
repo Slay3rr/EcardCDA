@@ -20,6 +20,10 @@ Encore
         config.useBuiltIns = 'usage';
         config.corejs = '3.38';
     })
+    .copyFiles({
+        from: './assets/images',
+        to: 'images/[path][name].[ext]'
+    })
 ;
 
 module.exports = Encore.getWebpackConfig();
