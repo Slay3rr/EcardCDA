@@ -144,6 +144,7 @@ body {
     white-space: nowrap;
 }
 /* Style des séparateurs de section */
+/* Style des séparateurs de section */
 .section-divider {
     position: relative;
     height: 120px;
@@ -154,7 +155,6 @@ body {
     overflow: hidden;
 }
 
-/* Overlay commun */
 .section-divider::before {
     content: '';
     position: absolute;
@@ -164,23 +164,6 @@ body {
     bottom: 0;
     background: rgba(0, 0, 0, 0.4);
 }
-
-/* Images spécifiques pour chaque séparateur */
-.divider-bestsellers {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../images/bg/bg1.jpg') center/cover;
-}
-
-.divider-nouveautes {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../images/bg/bg2.jpg') center/cover;
-}
-
-.divider-tendances {
-    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
-                url('../images/bg/bg4.jpg') center/cover;
-}
-
 
 .section-content {
     position: relative;
@@ -214,14 +197,4 @@ body {
     color: #000;
     transform: translateY(-2px);
     text-decoration: none;
-}
-
-/* Ajustement des sections */
-.section-wrapper {
-    padding: 40px 0;
-    position: relative;
-}
-
-.section-wrapper:nth-child(even) {
-    background-color: #f8f9fa;
 }
