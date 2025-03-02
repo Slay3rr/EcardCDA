@@ -144,15 +144,18 @@ body {
     white-space: nowrap;
 }
 /* Style des séparateurs de section */
-/* Style des séparateurs de section */
 .section-divider {
     position: relative;
-    height: 120px;
-    margin: 50px 0;
+    height: 200px; /* Plus haut pour plus d'impact */
+    padding: 0;
+    margin: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
+    width: 100vw; /* Prend toute la largeur de l'écran */
+    margin-left: calc(-50vw + 50%); /* Centre le séparateur */
+    margin-right: calc(-50vw + 50%);
 }
 
 .section-divider::before {
@@ -165,6 +168,13 @@ body {
     background: rgba(0, 0, 0, 0.4);
 }
 
+/* Ajustez l'espacement des sections */
+.section-wrapper {
+    padding: 60px 0; /* Plus d'espace vertical */
+    position: relative;
+    background-color: white; /* Fond blanc pour contraster avec les séparateurs */
+}
+
 .section-content {
     position: relative;
     z-index: 2;
@@ -174,27 +184,9 @@ body {
 }
 
 .section-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 15px;
+    font-size: 3rem; /* Plus grand pour plus d'impact */
+    margin: 0;
     text-transform: uppercase;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-}
-
-.section-btn {
-    background: transparent;
-    border: 2px solid white;
-    color: white;
-    padding: 8px 25px;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 10px;
-}
-
-.section-btn:hover {
-    background: white;
-    color: #000;
-    transform: translateY(-2px);
-    text-decoration: none;
+    letter-spacing: 2px;
 }
