@@ -7,8 +7,8 @@
 {% block title %}Ecard{% endblock %}
 
 {% block body %}
-
-<div class="container-fluid px-2">
+{# Carousel en pleine largeur #}
+<div class="container-fluid px-0">
     <div id="homeCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel">
         <div class="carousel-inner rounded-4">
             <div class="carousel-item active" style="height: 400px; background: url('{{ asset('images/Carousel/slide1.jpg') }}') no-repeat center center; background-size: cover;">
@@ -45,66 +45,48 @@
     </div>
 </div>
 
-<!-- Séparateur Best Sellers -->
-<div class="section-divider full-width" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg1.jpg') }}') center/cover;">
-    <div class="section-content">
-        <h2>Best Sellers</h2>
-    </div>
-</div>
-
 <!-- Section Best Sellers -->
-<section class="section-wrapper">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for article in bestSellers %}
-                <div class="col">
-                    {% import 'partials/_product_card.html.twig' as product_card %}
-                    {{ product_card.display(article, bestSellersImages[article.id] ?? null) }}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Séparateur Nouveautés -->
-<div class="section-divider full-width" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg2.jpg') }}') center/cover;">
-    <div class="section-content">
-        <h2>Nouveautés</h2>
+<div class="container" style="max-width: 1200px;">
+    <h2 class="section-title">Best Sellers</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for article in bestSellers %}
+            <div class="col">
+                {% import 'partials/_product_card.html.twig' as product_card %}
+                {{ product_card.display(article, bestSellersImages[article.id] ?? null) }}
+            </div>
+        {% endfor %}
     </div>
 </div>
+
+<!-- Séparateur décoratif -->
+<div class="section-divider" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg1.jpg') }}') center/cover;"></div>
 
 <!-- Section Nouveautés -->
-<section class="section-wrapper">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-md-4 g-4">
-            {% for article in nouveautes %}
-                <div class="col">
-                    {% import 'partials/_product_card.html.twig' as product_card %}
-                    {{ product_card.display(article, nouveautesImages[article.id] ?? null) }}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Séparateur Tendances -->
-<div class="section-divider full-width" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg4.jpg') }}') center/cover;">
-    <div class="section-content">
-        <h2>Tendances</h2>
+<div class="container" style="max-width: 1200px;">
+    <h2 class="section-title">Nouveautés</h2>
+    <div class="row row-cols-1 row-cols-md-4 g-4">
+        {% for article in nouveautes %}
+            <div class="col">
+                {% import 'partials/_product_card.html.twig' as product_card %}
+                {{ product_card.display(article, nouveautesImages[article.id] ?? null) }}
+            </div>
+        {% endfor %}
     </div>
 </div>
 
+<!-- Séparateur décoratif -->
+<div class="section-divider" style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg2.jpg') }}') center/cover;"></div>
+
 <!-- Section Tendances -->
-<section class="section-wrapper">
-    <div class="container">
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-            {% for article in tendances %}
-                <div class="col">
-                    {% import 'partials/_product_card.html.twig' as product_card %}
-                    {{ product_card.display(article, tendancesImages[article.id] ?? null) }}
-                </div>
-            {% endfor %}
-        </div>
+<div class="container" style="max-width: 1200px;">
+    <h2 class="section-title">Tendances</h2>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        {% for article in tendances %}
+            <div class="col">
+                {% import 'partials/_product_card.html.twig' as product_card %}
+                {{ product_card.display(article, tendancesImages[article.id] ?? null) }}
+            </div>
+        {% endfor %}
     </div>
-</section>
+</div>
 {% endblock %}

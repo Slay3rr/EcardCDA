@@ -143,51 +143,55 @@ body {
     font-size: 1.8rem;
     white-space: nowrap;
 }
-/* Style des séparateurs de section */
-.section-divider {
-    position: relative;
-    height: 300px; /* Plus haut */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.container-fluid.px-0 {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
     overflow: hidden;
 }
 
-/* Nouvelle classe pour forcer la pleine largeur */
-.full-width {
+/* Style des séparateurs */
+.section-divider {
     width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
     position: relative;
-    left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
-    margin-top: 80px;    /* Plus d'espace au-dessus */
-    margin-bottom: 80px; /* Plus d'espace en-dessous */
+    height: 500px; /* Plus grand pour un meilleur impact visuel */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 80px;
+    margin-bottom: 80px;
+    background-size: cover !important;
+    background-position: center !important;
+    background-repeat: no-repeat !important;
 }
 
-.section-divider::before {
+/* Style des titres de section */
+.section-title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    position: relative;
+}
+
+.section-title::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(to right, #007bff, #00bcd4);
 }
 
-.section-content {
+/* Pour éviter le défilement horizontal */
+body {
+    overflow-x: hidden;
     position: relative;
-    z-index: 2;
-    text-align: center;
-    color: white;
-    padding: 20px;
-    width: 100%; /* S'assurer que le contenu prend toute la largeur */
 }
-
-.section-content h2 {
-    font-size: 4rem; /* Titre plus grand */
-    margin: 0;
-    text-transform: uppercase;
-    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Ombre plus prononcée */
-    letter-spacing: 4px;
+.container {
+    padding: 40px 20px;
 }
