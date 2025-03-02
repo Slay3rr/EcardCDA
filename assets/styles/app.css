@@ -146,16 +146,23 @@ body {
 /* Style des séparateurs de section */
 .section-divider {
     position: relative;
-    height: 200px; /* Plus haut pour plus d'impact */
-    padding: 0;
-    margin: 0;
+    height: 300px; /* Plus haut */
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    width: 100vw; /* Prend toute la largeur de l'écran */
-    margin-left: calc(-50vw + 50%); /* Centre le séparateur */
-    margin-right: calc(-50vw + 50%);
+}
+
+/* Nouvelle classe pour forcer la pleine largeur */
+.full-width {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    margin-top: 80px;    /* Plus d'espace au-dessus */
+    margin-bottom: 80px; /* Plus d'espace en-dessous */
 }
 
 .section-divider::before {
@@ -168,25 +175,19 @@ body {
     background: rgba(0, 0, 0, 0.4);
 }
 
-/* Ajustez l'espacement des sections */
-.section-wrapper {
-    padding: 60px 0; /* Plus d'espace vertical */
-    position: relative;
-    background-color: white; /* Fond blanc pour contraster avec les séparateurs */
-}
-
 .section-content {
     position: relative;
     z-index: 2;
     text-align: center;
     color: white;
     padding: 20px;
+    width: 100%; /* S'assurer que le contenu prend toute la largeur */
 }
 
 .section-content h2 {
-    font-size: 3rem; /* Plus grand pour plus d'impact */
+    font-size: 4rem; /* Titre plus grand */
     margin: 0;
     text-transform: uppercase;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    letter-spacing: 2px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7); /* Ombre plus prononcée */
+    letter-spacing: 4px;
 }
