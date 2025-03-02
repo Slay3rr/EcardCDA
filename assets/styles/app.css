@@ -150,38 +150,32 @@ body {
     overflow: hidden;
 }
 
-/* Style des séparateurs */
 .section-divider {
     width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
+    height: 500px;
+    margin: 80px calc(-50vw + 50%);
     position: relative;
-    height: 500px; /* Plus grand pour un meilleur impact visuel */
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 80px;
-    margin-bottom: 80px;
-    background-size: cover !important;
-    background-position: center !important;
-    background-repeat: no-repeat !important;
     background-color: #333 !important;
-
+    z-index: 1;
 }
 
-/* Style des titres de section */
+/* Style des sections */
 .section-title {
     font-size: 2.5rem;
-    color: #333;
-    margin-bottom: 30px;
     text-align: center;
+    color: #2c3e50;
+    margin: 40px 0;
+    padding-bottom: 15px;
     position: relative;
 }
 
 .section-title::after {
     content: '';
     position: absolute;
-    bottom: -10px;
+    bottom: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 100px;
@@ -193,6 +187,7 @@ body {
 body {
     overflow-x: hidden;
     position: relative;
+    background-color: skyblue;
 }
 .container {
     padding: 40px 20px;
