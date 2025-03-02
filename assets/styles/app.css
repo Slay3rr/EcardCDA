@@ -165,6 +165,8 @@ body {
     background-size: cover !important;
     background-position: center !important;
     background-repeat: no-repeat !important;
+    background-color: #333 !important;
+
 }
 
 /* Style des titres de section */
