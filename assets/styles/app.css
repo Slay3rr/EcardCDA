@@ -151,19 +151,19 @@ body {
 }
 
 .section-divider {
+    position: relative;
     width: 100vw;
-    height: 500px !important;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
+    height: 500px;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
     margin-top: 80px;
     margin-bottom: 80px;
-    position: relative;
     display: block;
     background-color: red !important;
     border: 5px solid yellow !important;
     z-index: 1;
-    overflow: hidden;
 }
+
 
 /* Style des sections */
 .section-title {
@@ -192,5 +192,12 @@ body {
     position: relative;
 }
 .container {
-    padding: 40px 20px;
+    position: relative;
+    z-index: 2;
+}
+
+main {
+    width: 100%;
+    overflow-x: visible;
+    position: relative;
 }

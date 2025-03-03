@@ -14,8 +14,11 @@
     {# Styles personnalisés si besoin #}
     <style>
       body {
-        background-color: #F8F9FA; /* Fond général gris clair */
-        color: #212529; /* Couleur de texte principal */
+        background-color: #F8F9FA;
+        color: #212529;
+        overflow-x: hidden; /* Ajout important */
+        position: relative; /* Ajout important */
+        width: 100%; /* Ajout important */
       }
       a {
         color: #0D6EFD; /* Couleur des liens */
@@ -55,7 +58,7 @@
     {# Inclusion du header #}
     {% include 'partials/_header.html.twig' %}
 
-    <main class="mt-4">
+    <main class="position-relative overflow-hidden"> {# Modifié ici #}
       {% block body %}{% endblock %}
     </main>
 
