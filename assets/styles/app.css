@@ -151,15 +151,10 @@ body {
 }
 
 .section-divider {
-    width: 100vw;
-    height: 500px;
-    margin: 80px calc(-50vw + 50%);
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #333 !important;
-    z-index: 1;
+    background-color: red !important;
+    border: 5px solid yellow !important;
+    min-height: 500px !important;
+    z-index: 9999 !important;
 }
 
 /* Style des sections */
