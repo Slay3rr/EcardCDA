@@ -50,6 +50,10 @@ JWT_SECRET_KEY=%kernel.project_dir%/config/jwt/private.pem
 JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=Tamao
 
+# Configuration Cloudinary
+CLOUDINARY_CLOUD_NAME=dienxmy6h
+CLOUDINARY_API_KEY=344731258574875
+CLOUDINARY_API_SECRET=gRJckNUdrguzXpj_KZpH59J_U2w
 
 
 # Configuration CORS
