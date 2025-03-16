@@ -12,6 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 
+
 #[ORM\Entity]
 #[UniqueEntity(fields: ["email"], message: "Cet email est déjà utilisé.")]
 #[UniqueEntity(fields: ["username"], message: "Ce nom d'utilisateur est déjà pris.")]
