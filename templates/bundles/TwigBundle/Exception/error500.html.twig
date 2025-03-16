@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Erreur interne (500)</h1>
+
+    <p>
+        Une erreur est survenue lors du traitement de votre requête. Veuillez réessayer plus tard ou 
+        <a href="{{ path('homepage') }}">retournez à l'accueil</a>.
+    </p>
+{% endblock %}

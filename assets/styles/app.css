@@ -143,6 +143,26 @@ body {
     font-size: 1.8rem;
     white-space: nowrap;
 }
+body {
+    background-color: skyblue;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+}
+
+main {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+}
+
+/* Conteneurs */
+.container {
+    position: relative;
+    z-index: 2;
+    padding: 40px 20px;
+}
+
 .container-fluid.px-0 {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
@@ -150,22 +170,29 @@ body {
     overflow: hidden;
 }
 
+/* Séparateur */
 .section-divider {
     position: relative;
     width: 100vw;
     height: 500px;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    margin-top: 80px;
-    margin-bottom: 80px;
-    display: block;
+    margin: 80px calc(-50vw + 50%);
     background-color: red !important;
     border: 5px solid yellow !important;
     z-index: 1;
+    overflow: hidden;
 }
 
+.section-divider > div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
 
-/* Style des sections */
+/* Section Title */
 .section-title {
     font-size: 2.5rem;
     text-align: center;
@@ -186,18 +213,12 @@ body {
     background: linear-gradient(to right, #007bff, #00bcd4);
 }
 
-/* Pour éviter le défilement horizontal */
-body {
-    overflow-x: hidden;
-    position: relative;
-}
-.container {
-    position: relative;
-    z-index: 2;
-}
 
-main {
-    width: 100%;
-    overflow-x: visible;
-    position: relative;
-}
+/* $grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+); */

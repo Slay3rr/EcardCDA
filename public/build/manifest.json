@@ -1,18 +1,15 @@
 {
-  "build/app.css": "/build/app.0ef83c89.css",
-  "build/app.js": "/build/app.fb812d88.js",
-  "build/runtime.js": "/build/runtime.0a30bfd9.js",
+  "build/app.css": "/build/app.css",
+  "build/app.js": "/build/app.js",
+  "build/runtime.js": "/build/runtime.js",
   "build/images/bg/bg3.jpg": "/build/images/bg/bg3.f37d1e8c.jpg",
   "build/images/bg/bg1.jpg": "/build/images/bg/bg1.19672e0a.jpg",
-  "build/images/bg1.jpg": "/build/images/bg1.19672e0a.jpg",
   "build/images/Carousel/slide2.jpg": "/build/images/Carousel/slide2.0c5cdc36.jpg",
   "build/images/slide2.jpg": "/build/images/slide2.0c5cdc36.jpg",
   "build/images/bg/bg2.jpg": "/build/images/bg/bg2.1a5ba28e.jpg",
-  "build/images/bg2.jpg": "/build/images/bg2.1a5ba28e.jpg",
   "build/images/Carousel/slide1.jpg": "/build/images/Carousel/slide1.02cae38b.jpg",
   "build/images/slide1.jpg": "/build/images/slide1.02cae38b.jpg",
   "build/images/bg/bg4.jpg": "/build/images/bg/bg4.ec7db0ba.jpg",
-  "build/images/bg4.jpg": "/build/images/bg4.ec7db0ba.jpg",
   "build/images/Carousel/slide3.jpg": "/build/images/Carousel/slide3.03533441.jpg",
   "build/images/slide3.jpg": "/build/images/slide3.03533441.jpg"
 }

@@ -29,6 +29,7 @@ class CloudinaryService
         ]);
     }
 
+
     public function uploadImage($file)
     {
         try {

@@ -3,6 +3,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}E-Card{% endblock %}</title>
 
     {# Liens Bootstrap 5 (CDN par exemple) #}
@@ -58,9 +59,9 @@
     {# Inclusion du header #}
     {% include 'partials/_header.html.twig' %}
 
-    <main class="position-relative overflow-hidden"> {# Modifié ici #}
-      {% block body %}{% endblock %}
-    </main>
+    <main class="position-relative w-100 overflow-hidden"> {# Ajout des classes #}
+  {% block body %}{% endblock %}
+</main>
 
     {# Inclusion du footer #}
     {% include 'partials/_footer.html.twig' %}

@@ -82,7 +82,6 @@ class AdminController extends AbstractController
     }
 
 
-
     #[Route('/users/{id}', name: 'admin_user_delete', methods: ['DELETE'])]
     public function delete(int $id, UserRepository $userRepository, EntityManagerInterface $em): JsonResponse
     {
