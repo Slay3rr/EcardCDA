@@ -25,8 +25,14 @@ class SecurityController extends AbstractController
     #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        // Si l'utilisateur est déjà connecté, redirigez-le
+        if ($this->getUser()) {
+            return $this->redirectToRoute('public_articles');
+        }
+    
+        // Créer le formulaire de login
         $form = $this->createForm(LoginFormType::class);
-        
+    
         return $this->render('security/login.html.twig', [
             'form' => $form->createView(),
             'error' => $authenticationUtils->getLastAuthenticationError(),
