@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Entity\Category;
+use App\Form\SearchType;
 use App\Repository\CategoryRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,6 +13,7 @@ use App\Repository\ArticleRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use App\Document\CardImage;
+
 
 class ArticleController extends AbstractController
 {
@@ -103,23 +105,29 @@ class ArticleController extends AbstractController
     #[Route('/articles/search', name: 'article_search', methods: ['GET'])]
     public function search(Request $request, ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
-        $searchType = $request->query->get('search_type');
-        $query = $request->query->get('query');
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+
         $articles = [];
 
-        if ($searchType === 'category' && $query) {
-            $category = $categoryRepository->findByName($query);
-            $articles = $category ? $articleRepository->findByCategory($category) : [];
-        } elseif ($searchType === 'article' && $query) {
-            $articles = $articleRepository->findByTitleOrContent($query);
-        } else {
-            $articles = $articleRepository->findAll();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $searchType = $data['search_type'];
+            $query = $data['query'];
+
+            if ($searchType === 'category') {
+                $category = $categoryRepository->findByName($query);
+                $articles = $category ? $articleRepository->findByCategory($category) : [];
+            } elseif ($searchType === 'article') {
+                $articles = $articleRepository->findByTitleOrContent($query);
+            }
         }
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'categories' => $categoryRepository->findAll(),
-            'imageUrls' => $this->getImageUrls($articles)
+            'imageUrls' => $this->getImageUrls($articles),
+            'searchForm' => $form->createView()
         ]);
     }
 }

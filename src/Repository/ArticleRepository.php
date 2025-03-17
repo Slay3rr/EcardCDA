@@ -1,17 +1,11 @@
 <?php
-
 namespace App\Repository;
 
 use App\Entity\Article;
+use App\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Category;
 
-
-
-/**
- * @extends ServiceEntityRepository<Article>
- */
 class ArticleRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -19,30 +13,40 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-       /**
-        * @param Category $category
-        * @return Article[]
-        */
-        public function findByCategory(Category $category): array
-{
-    return $this->createQueryBuilder('a')
-        ->innerJoin('a.Category', 'c')
-        ->andWhere('c.id = :categoryId')
-        ->setParameter('categoryId', $category->getId())
-        ->orderBy('a.id', 'DESC')
-        ->getQuery()
-        ->getResult();
-}
+    public function findByCategory(Category $category): array
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin('a.Category', 'c')
+            ->andWhere('c.id = :categoryId')
+            ->setParameter('categoryId', $category->getId())
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(50)  // Limite le nombre de résultats
+            ->getQuery()
+            ->getResult();
+    }
 
-public function findByTitleOrContent(string $query): array
-{
-    return $this->createQueryBuilder('a')
-         ->where('a.Titre LIKE :query OR a.content LIKE :query')
-         ->setParameter('query', '%' . $query . '%')
-         ->orderBy('a.id', 'DESC')
-         ->getQuery()
-         ->getResult();
-}
-
+    public function findByTitleOrContent(string $query): array
+    {
+        // Nettoyage de la requête
+        $searchTerm = trim(strip_tags($query));
         
+
+        // Échappement des caractères spéciaux pour LIKE
+        $searchTerm = $this->escapeLikeString($searchTerm);
+
+        return $this->createQueryBuilder('a')
+            ->where('LOWER(a.Titre) LIKE LOWER(:query)')
+            ->orWhere('LOWER(a.content) LIKE LOWER(:query)')
+            ->setParameter('query', '%' . $searchTerm . '%')
+            ->orderBy('a.id', 'DESC')
+            ->setMaxResults(50)  // Limite le nombre de résultats
+            ->getQuery()
+            ->getResult();
+    }
+
+    private function escapeLikeString(string $str): string
+    {
+        // Échappe les caractères spéciaux LIKE
+        return str_replace(['%', '_'], ['\%', '\_'], $str);
+    }
 }
