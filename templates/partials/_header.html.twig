@@ -22,12 +22,11 @@
                     </div>
                 {{ form_end(searchForm) }}
             {% endif %}
-
-            <ul class="navbar-nav ms-auto">
-            {% if app.user %}
                 <a class="nav-link" href="{{ path('public_articles') }}">
                     <i class="fas fa-shopping-bag"></i> Articles
                 </a>
+            <ul class="navbar-nav ms-auto">
+            {% if app.user %}
                 <a class="nav-link" href="{{ path('user_profile') }}">Mon Profil</a>
                 <a class="nav-link" href="{{ path('cart_show') }}">Mon Panier</a>
                 <a class="nav-link" href="{{ path('app_logout') }}">Déconnexion</a>
