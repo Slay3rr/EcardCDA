@@ -23,6 +23,7 @@
     {# Affichage des offres existantes avec actions spécifiques #}
     {% if article.offres|length > 0 %}
         <h3 style="font-size: 1.4rem; color: #555; margin-top: 30px; margin-bottom: 20px;">Offres disponibles</h3>
+        <div class="table-responsive">
         <table class="table" style="font-size: 1rem;">
             <thead>
                 <tr style="background-color: #f4f4f4; text-align: left;">
@@ -77,6 +78,7 @@
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     {% else %}
         <p style="color: #888; font-size: 1rem; margin-top: 15px;">Aucune offre disponible pour cet article.</p>
     {% endif %}
