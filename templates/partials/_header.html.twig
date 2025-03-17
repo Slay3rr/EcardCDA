@@ -8,17 +8,18 @@
             <span class="navbar-toggler-icon" style="filter: invert(100%);"></span>
         </button>
 
-       {{ form_start(form(SearchType), {
-            'attr': {'class': 'd-flex mx-auto'},
-            'action': path('article_search')
-        }) }}
-            <div class="input-group">
-                {{ form_widget(form(SearchType).search_type) }}
-                {{ form_widget(form(SearchType).query) }}
-                <button class="btn btn-primary" type="submit">Rechercher</button>
-            </div>
-        {{ form_end() }}
-
+        {% if searchForm is defined %}
+            {{ form_start(searchForm, {
+                'attr': {'class': 'd-flex mx-auto'}
+            }) }}
+                <div class="input-group">
+                    {{ form_widget(searchForm.search_type) }}
+                    {{ form_widget(searchForm.query) }}
+                    <button class="btn btn-primary" type="submit">Rechercher</button>
+                </div>
+            {{ form_end(searchForm) }}
+        {% endif %}
+        
         <div class="navbar-nav ms-auto">
             {% if app.user %}
                 <a class="nav-link" href="{{ path('user_profile') }}">Mon Profil</a>

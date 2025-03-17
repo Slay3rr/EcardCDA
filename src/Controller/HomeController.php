@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ODM\MongoDB\DocumentManager;
 use App\Document\CardImage;
+use App\Form\SearchType;
+
 
 class HomeController extends AbstractController
 {
@@ -38,6 +40,11 @@ class HomeController extends AbstractController
     #[Route('/', name: 'home')]
     public function index(ArticleRepository $articleRepository): Response
     {
+        // Création du formulaire de recherche
+        $form = $this->createForm(SearchType::class, null, [
+            'action' => $this->generateUrl('article_search'),
+            'method' => 'GET'
+        ]);
         // Récupération des articles
         $bestSellers = $articleRepository->findBy([], ['id' => 'DESC'], 3);
         $nouveautes = $articleRepository->findBy([], ['id' => 'DESC'], 4);
@@ -49,6 +56,7 @@ class HomeController extends AbstractController
         $tendancesImages = $this->getImagesForArticles($tendances);
 
         return $this->render('home/home_page.html.twig', [
+            'searchForm' => $form->createView(),
             'bestSellers' => $bestSellers,
             'nouveautes' => $nouveautes,
             'tendances' => $tendances,
