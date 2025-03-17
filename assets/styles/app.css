@@ -213,6 +213,11 @@ main {
     background: linear-gradient(to right, #007bff, #00bcd4);
 }
 
+.table-responsive {
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    -webkit-overflow-scrolling: touch;
+}
 
 /* $grid-breakpoints: (
   xs: 0,
