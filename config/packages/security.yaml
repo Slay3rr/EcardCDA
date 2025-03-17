@@ -37,7 +37,7 @@ security:
       form_login:
         login_path: app_login
         check_path: app_login
-        username_parameter: email    # Utilisez 'email' au lieu de '_username'
+        username_parameter: email
         password_parameter: password # Utilisez 'password' au lieu de '_password'
         default_target_path: public_articles
         enable_csrf: true
