@@ -15,6 +15,7 @@ use Doctrine\ODM\MongoDB\DocumentManager;
 use App\Document\CardImage;
 
 
+
 class ArticleController extends AbstractController
 {
     private $documentManager;
@@ -45,11 +46,14 @@ class ArticleController extends AbstractController
     public function publicIndex(ArticleRepository $articleRepository, CategoryRepository $categoryRepository): Response
     {
         $articles = $articleRepository->findBy([], ['id' => 'DESC']);
-        
+        $searchForm = $this->createForm(SearchType::class); // Ajout du formulaire
+
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'categories' => $categoryRepository->findAll(),
-            'imageUrls' => $this->getImageUrls($articles)
+            'imageUrls' => $this->getImageUrls($articles),
+            'searchForm' => $searchForm->createView() // Passage du formulaire à la vue
+
         ]);
     }
 
@@ -58,10 +62,14 @@ class ArticleController extends AbstractController
     {
         $imageUrls = $this->getImageUrls([$article]);
         $imageUrl = $imageUrls[$article->getId()] ?? null;
+        $searchForm = $this->createForm(SearchType::class); // Ajout du formulaire
+
 
         return $this->render('article/show.html.twig', [
             'article' => $article,
-            'imageUrl' => $imageUrl
+            'imageUrl' => $imageUrl,
+            'searchForm' => $searchForm->createView() // Passage du formulaire à la vue
+
         ]);
     }
 
@@ -76,11 +84,15 @@ class ArticleController extends AbstractController
         }
 
         $articles = $category ? $category->getArticles()->toArray() : $categoryRepository->findAll();
+        $searchForm = $this->createForm(SearchType::class); // Ajout du formulaire
+
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'categories' => $categoryRepository->findAll(),
-            'imageUrls' => $this->getImageUrls($articles)
+            'imageUrls' => $this->getImageUrls($articles),
+            'searchForm' => $searchForm->createView() // Passage du formulaire à la vue
+
         ]);
     }
 
@@ -93,12 +105,16 @@ class ArticleController extends AbstractController
         }
 
         $articles = $category->getArticles()->toArray();
+        $searchForm = $this->createForm(SearchType::class); // Ajout du formulaire
+
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'categories' => $categoryRepository->findAll(),
             'currentCategory' => $category,
-            'imageUrls' => $this->getImageUrls($articles)
+            'imageUrls' => $this->getImageUrls($articles),
+            'searchForm' => $searchForm->createView() // Passage du formulaire à la vue
+
         ]);
     }
 
