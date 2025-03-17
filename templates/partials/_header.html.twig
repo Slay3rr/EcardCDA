@@ -9,7 +9,7 @@
         </button>
 
         {# Remplacer votre ancien formulaire par celui-ci #}
-        {% if searchForm is defined %}
+       {% if searchForm is defined %}
             {{ form_start(searchForm, {'attr': {'class': 'd-flex mx-auto'}}) }}
                 <div class="input-group">
                     {{ form_widget(searchForm.search_type) }}
