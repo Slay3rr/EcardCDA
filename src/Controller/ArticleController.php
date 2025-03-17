@@ -123,14 +123,14 @@ class ArticleController extends AbstractController
     {
         $form = $this->createForm(SearchType::class);
         $form->handleRequest($request);
-
+        
         $articles = [];
-
+        
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $searchType = $data['search_type'];
             $query = $data['query'];
-
+            
             if ($searchType === 'category') {
                 $category = $categoryRepository->findByName($query);
                 $articles = $category ? $articleRepository->findByCategory($category) : [];
@@ -138,7 +138,7 @@ class ArticleController extends AbstractController
                 $articles = $articleRepository->findByTitleOrContent($query);
             }
         }
-
+    
         return $this->render('article/index.html.twig', [
             'articles' => $articles,
             'categories' => $categoryRepository->findAll(),
