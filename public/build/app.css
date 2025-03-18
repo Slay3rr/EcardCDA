@@ -445,7 +445,20 @@ body {
     border-radius: 10px;
     display: inline-block;
 }
-
+.carousel-bg {
+    height: 400px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  @media (max-width: 768px) {
+    .carousel-bg {
+      height: 250px;
+    }
+    .carousel-caption h2 {
+      font-size: 1.5rem;
+    }
+  }
 .caption-box h2 {
     color: white;
     margin: 0;

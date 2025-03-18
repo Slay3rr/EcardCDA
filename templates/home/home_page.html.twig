@@ -9,32 +9,34 @@
 {% block body %}
 {# Carousel en pleine largeur #}
 <div class="container-fluid px-0">
-    <div id="homeCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel">
-        <div class="carousel-inner rounded-4">
-            <div class="carousel-item active" style="height: 400px; background: url('{{ asset('images/Carousel/slide1.jpg') }}') no-repeat center center; background-size: cover;">
-                <div class="carousel-caption">
-                    <h2>Découvrez tout l'univers de Yu-Gi-Oh!</h2>
-                </div>
-            </div>
-            <div class="carousel-item" style="height: 400px; background: url('{{ asset('images/Carousel/slide2.jpg') }}') no-repeat center center; background-size: cover;">
-                <div class="carousel-caption">
-                    <h2>Attrapez toutes les cartes Pokemons en un click!</h2>
-                </div>
-            </div>
-            <div class="carousel-item" style="height: 400px; background: url('{{ asset('images/Carousel/slide3.jpg') }}') no-repeat center center; background-size: cover;">
-                <div class="carousel-caption">
-                    <h2>Achetez, Vendez en quelques clics!</h2>
-                </div>
-            </div>
+  <div id="homeCarousel" class="carousel slide carousel-fade mb-5" data-bs-ride="carousel">
+    <div class="carousel-inner rounded-4">
+      <div class="carousel-item active carousel-bg" style="background-image: url('{{ asset('images/Carousel/slide1.jpg') }}');">
+        <div class="carousel-caption">
+          <h2>Découvrez tout l'univers de Yu-Gi-Oh!</h2>
         </div>
-
-        <!-- Indicateurs -->
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active"></button>
-            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1"></button>
-            <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2"></button>
+      </div>
+      <div class="carousel-item carousel-bg" style="background-image: url('{{ asset('images/Carousel/slide2.jpg') }}');">
+        <div class="carousel-caption">
+          <h2>Attrapez toutes les cartes Pokemons en un click!</h2>
         </div>
-
+      </div>
+      <div class="carousel-item carousel-bg" style="background-image: url('{{ asset('images/Carousel/slide3.jpg') }}');">
+        <div class="carousel-caption">
+          <h2>Achetez, Vendez en quelques clics!</h2>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Précédent</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Suivant</span>
+    </button>
+  </div>
+</div>
         <!-- Contrôles -->
         <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon"></span>
@@ -76,7 +78,6 @@
     </div>
 </div>
 
-<!-- Séparateur décoratif -->
 <!-- Séparateur décoratif -->
 <div class="section-divider">
     <div style="background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('{{ asset('images/bg/bg2.jpg') }}') center/cover no-repeat;"></div>
