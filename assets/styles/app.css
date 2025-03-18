@@ -239,6 +239,13 @@ body {
     font-family: 'Roboto', sans-serif;
     font-weight: 500;
 }
+.navbar-brand img {
+    height: auto;
+    width: 100%;
+    max-width: 150px; /* Ajustez selon vos besoins */
+    object-fit: contain;
+    border-radius: 60%;
+}
 
 /* $grid-breakpoints: (
   xs: 0,
