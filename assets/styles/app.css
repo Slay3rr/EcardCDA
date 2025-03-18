@@ -1,5 +1,6 @@
 body {
     background-color: skyblue;
+    font-family: 'Roboto', sans-serif;
 }
 /* Style pour les cartes */
 .card-trading {
@@ -7,6 +8,7 @@ body {
     width: 100%;   /* Largeur responsive */
     max-width: 300px; /* Largeur maximale */
     margin: 0 auto; /* Centre la carte */
+    font-family: 'Roboto', sans-serif;
 }
 
 .card-trading:hover {
@@ -28,6 +30,7 @@ body {
     margin-bottom: 40px;
     padding-bottom: 15px;
     color: #2c3e50;
+    font-family: 'Roboto', sans-serif;
 }
 
 .section-title::after {
@@ -148,6 +151,7 @@ body {
     overflow-x: hidden;
     position: relative;
     width: 100%;
+    font-family: 'Roboto', sans-serif;
 }
 
 main {
@@ -200,6 +204,7 @@ main {
     margin: 40px 0;
     padding-bottom: 15px;
     position: relative;
+    font-family: 'Roboto', sans-serif;
 }
 
 .section-title::after {
@@ -217,6 +222,22 @@ main {
     overflow-x: auto;
     margin-bottom: 1rem;
     -webkit-overflow-scrolling: touch;
+}
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Titres */
+.section-title {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+
+/* Texte de la navigation */
+.navbar {
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
 }
 
 /* $grid-breakpoints: (
