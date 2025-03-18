@@ -82,10 +82,11 @@
         </div>
 
         {{ form_row(registrationForm.terms, {
-            'attr': {'class': 'form-check-input'},
-            'row_attr': {'class': 'form-check mt-3'},
-            'label_attr': {'class': 'form-check-label'}
-        }) }}
+    'attr': {'class': 'form-check-input'},
+    'row_attr': {'class': 'form-check mt-3'},
+    'label_attr': {'class': 'form-check-label'},
+    'label': "J'accepte les <a href='" ~ path('app_terms') ~ "' target='_blank' class='text-primary text-decoration-underline'>conditions d'utilisation</a>"
+}) }}
 
         <button type="submit" class="btn btn-primary mt-3">S'inscrire</button>
     {{ form_end(registrationForm) }}

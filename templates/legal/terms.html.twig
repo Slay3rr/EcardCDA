@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Conditions d'utilisation - E-Card{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Conditions d'utilisation</h1>
+
+    <div class="card">
+        <div class="card-body">
+            <h2 class="h5 mb-3">1. Acceptation des conditions</h2>
+            <p>En accédant et en utilisant le site E-Card, vous acceptez d'être lié par ces conditions d'utilisation.</p>
+
+            <h2 class="h5 mb-3 mt-4">2. Inscription et compte</h2>
+            <ul>
+                <li>Vous devez avoir au moins 18 ans pour vous inscrire</li>
+                <li>Les informations fournies doivent être exactes et à jour</li>
+                <li>Vous êtes responsable de la confidentialité de votre compte</li>
+                <li>Un seul compte par personne est autorisé</li>
+            </ul>
+
+            <h2 class="h5 mb-3 mt-4">3. Achat et vente de cartes</h2>
+            <ul>
+                <li>Les transactions doivent respecter nos règles de commerce</li>
+                <li>Les descriptions des articles doivent être précises et honnêtes</li>
+                <li>Les prix doivent être raisonnables et justifiés</li>
+                <li>Nous nous réservons le droit de refuser toute transaction suspecte</li>
+            </ul>
+
+            <h2 class="h5 mb-3 mt-4">4. Propriété intellectuelle</h2>
+            <p>Tout le contenu du site est protégé par les lois sur la propriété intellectuelle. Les images des cartes appartiennent à leurs propriétaires respectifs.</p>
+
+            <h2 class="h5 mb-3 mt-4">5. Comportement des utilisateurs</h2>
+            <ul>
+                <li>Respect mutuel entre utilisateurs</li>
+                <li>Interdiction de contenu inapproprié ou offensant</li>
+                <li>Pas de spam ou de comportement frauduleux</li>
+                <li>Respect des règles de la communauté</li>
+            </ul>
+
+            <div class="mt-4 pt-3 border-top">
+                <small class="text-muted">Dernière mise à jour : {{ "now"|date("d/m/Y") }}</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="{{ path('app_register') }}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Retour à l'inscription
+        </a>
+    </div>
+</div>
+{% endblock %}
