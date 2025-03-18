@@ -81,14 +81,14 @@
             </div>
         </div>
 
-    {{ form_row(registrationForm.terms, {
-    'attr': {'class': 'form-check-input'},
-    'row_attr': {'class': 'form-check mt-3'},
-    'label_attr': {'class': 'form-check-label'},
-    'label': "J'accepte les conditions d'utilisation"|trans,
-    'help': "<a href=\"" ~ path('app_terms') ~ "\" target=\"_blank\" class=\"text-primary text-decoration-underline\">Lire les conditions d'utilisation</a>"|raw,
-    'help_attr': {'class': 'form-text mt-1'}
-}) }}
+        {{ form_row(registrationForm.terms, {
+            'attr': {'class': 'form-check-input'},
+            'row_attr': {'class': 'form-check mt-3'},
+            'label_attr': {'class': 'form-check-label'},
+            'label': "J'accepte les conditions d'utilisation"|trans,
+            'help': "<a href=\"" ~ path('app_terms') ~ "\" target=\"_blank\" class=\"text-primary text-decoration-underline\">Lire les conditions d'utilisation</a>"|raw,
+            'help_attr': {'class': 'form-text mt-1'}
+        }) }}
 
         <button type="submit" class="btn btn-primary mt-3">S'inscrire</button>
     {{ form_end(registrationForm) }}
