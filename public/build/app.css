@@ -410,36 +410,46 @@ body {
     position: relative;
 }
 
-/* Application uniforme pour les légendes (carousel-caption et caption-box) */
-.carousel-caption h2,
-.caption-box h2 {
-    color: white !important;
-    margin: 0 !important;
-    font-size: clamp(1rem, 4vw, 1.8rem) !important; /* Redimensionnement fluide */
-    line-height: 1.2 !important;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
-    white-space: normal !important;           /* Permet le retour à la ligne */
-    word-break: break-word !important;         /* Coupe les mots trop longs */
-    overflow-wrap: break-word !important;
-}
-
-/* Boîte de légende : positionnement en bas au centre */
+/* Boîte de légende : positionnement au centre en bas */
 .carousel-caption,
 .caption-box {
     position: absolute !important;
-    bottom: 50px !important; /* Position depuis le bas au lieu de top */
+    bottom: 50px !important;
     left: 50% !important;
-    transform: translateX(-50%) !important; /* Uniquement translation horizontale */
-    width: auto !important; /* Largeur automatique basée sur le contenu */
-    min-width: 200px !important;
+    transform: translateX(-50%) !important;
+    width: fit-content !important;
+    min-width: min(200px, 90%) !important;
     max-width: 90% !important;
+    margin: 0 auto !important;
     box-sizing: border-box !important;
     padding: clamp(10px, 2vw, 20px) !important;
     background: rgba(0, 0, 0, 0.7) !important;
     backdrop-filter: blur(5px) !important;
     border-radius: 10px !important;
     text-align: center !important;
+    display: inline-block !important;
     overflow: hidden !important;
+}
+
+.carousel-caption h2,
+.caption-box h2 {
+    color: white !important;
+    margin: 0 auto !important;
+    font-size: clamp(1rem, 4vw, 1.8rem) !important;
+    line-height: 1.2 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+    white-space: normal !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+/* Also update the carousel container */
+.carousel-inner {
+    width: 100% !important;
+    margin: 0 auto !important;
+    border-radius: 15px !important;
+    overflow: hidden !important;
+    position: relative !important;
 }
 
 /* Ajustement pour les petits écrans */
