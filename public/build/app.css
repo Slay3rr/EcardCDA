@@ -424,41 +424,38 @@ body {
     background-size: cover;
 }
 
-/* Boîte de légende (caption) */
+/* Boîte de légende (caption) responsive */
 .carousel-caption {
     position: absolute;
     top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
     width: 90%;            /* Largeur relative */
-    max-width: 90%;        /* Limite la largeur pour éviter les débordements */
-    box-sizing: border-box; /* Inclut le padding dans la largeur */
-    padding: clamp(10px, 2vw, 20px);  /* Padding fluide en fonction de l'écran */
+    max-width: 90%;        /* Limite la largeur */
+    box-sizing: border-box;/* Inclut le padding dans la largeur */
+    padding: clamp(10px, 2vw, 20px);  /* Padding fluide */
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     border-radius: 10px;
     text-align: center;
-    overflow: hidden;      /* Empêche le contenu de déborder */
+    overflow: hidden;      /* Empêche le débordement visuel */
 }
 
-/* Texte de la légende */
+/* Texte de la légende responsive */
 .carousel-caption h2 {
     color: white;
     margin: 0;
-    /* Utilisation de clamp pour un redimensionnement fluide, avec une taille max raisonnable */
-    font-size: clamp(0.8rem, 4vw, 1.2rem);
+    font-size: clamp(0.8rem, 4vw, 1.2rem); /* Redimensionnement fluide */
     line-height: 1.2;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: normal;   /* Permet le retour à la ligne */
-    word-break: break-word;/* Coupe les mots trop longs */
+    /* Forcer le passage à la ligne et couper les mots trop longs */
+    white-space: normal;
+    word-break: break-word;
     overflow-wrap: break-word;
 }
 
-/* Ajustements pour petits écrans (ex: smartphones) */
-@media (max-width: 576px) {
-    .carousel-item {
-        height: 280px;    /* Réduction de la hauteur du carousel */
-    }
+/* Ajustements supplémentaires pour très petits écrans (ex : iPhone SE) */
+@media (max-width: 375px) {
     .carousel-caption {
         padding: clamp(6px, 2vw, 15px);
         max-width: 95%;
