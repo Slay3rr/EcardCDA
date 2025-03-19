@@ -410,58 +410,47 @@ body {
     position: relative;
 }
 
-/* Gestion globale du carousel */
-#homeCarousel {
-    width: 100%;
-    position: relative;
+/* Application uniforme pour les légendes (carousel-caption et caption-box) */
+.carousel-caption h2,
+.caption-box h2 {
+    color: white !important;
+    margin: 0 !important;
+    font-size: clamp(1rem, 4vw, 1.8rem) !important; /* Redimensionnement fluide */
+    line-height: 1.2 !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+    white-space: normal !important;           /* Permet le retour à la ligne */
+    word-break: break-word !important;         /* Coupe les mots trop longs */
+    overflow-wrap: break-word !important;
 }
 
-/* Carousel item - garde la hauteur relative */
-/* Carousel item – hauteur gérée en CSS */
-.carousel-item {
-    height: 400px; /* Vous pouvez ajuster ou utiliser des unités relatives (vh) */
-    background-position: center;
-    background-size: cover;
+/* Boîte de légende : s'assurer qu'elle ne déborde pas */
+.carousel-caption,
+.caption-box {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 90% !important;
+    max-width: 90% !important;
+    box-sizing: border-box !important;
+    padding: clamp(10px, 2vw, 20px) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(5px) !important;
+    border-radius: 10px !important;
+    text-align: center !important;
+    overflow: hidden !important;
 }
 
-/* Boîte de légende (caption) responsive */
-.carousel-caption {
-    position: absolute;
-    top: 50%; 
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;            /* Largeur relative */
-    max-width: 90%;        /* Limite la largeur */
-    box-sizing: border-box;/* Inclut le padding dans la largeur */
-    padding: clamp(10px, 2vw, 20px);  /* Padding fluide */
-    background: rgba(0, 0, 0, 0.7);
-    backdrop-filter: blur(5px);
-    border-radius: 10px;
-    text-align: center;
-    overflow: hidden;      /* Empêche le débordement visuel */
-}
-
-/* Texte de la légende responsive */
-.carousel-caption h2 {
-    color: white;
-    margin: 0;
-    font-size: clamp(0.8rem, 4vw, 1.2rem); /* Redimensionnement fluide */
-    line-height: 1.2;
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    /* Forcer le passage à la ligne et couper les mots trop longs */
-    white-space: normal;
-    word-break: break-word;
-    overflow-wrap: break-word;
-}
-
-/* Ajustements supplémentaires pour très petits écrans (ex : iPhone SE) */
+/* Pour très petits écrans (ex : iPhone SE) */
 @media (max-width: 375px) {
-    .carousel-caption {
-        padding: clamp(6px, 2vw, 15px);
-        max-width: 95%;
+    .carousel-caption,
+    .caption-box {
+        padding: clamp(6px, 2vw, 15px) !important;
+        max-width: 95% !important;
     }
-    .carousel-caption h2 {
-        font-size: clamp(0.7rem, 5vw, 1rem);
+    .carousel-caption h2,
+    .caption-box h2 {
+        font-size: clamp(0.8rem, 5vw, 1rem) !important;
     }
 }
 .caption-box {
