@@ -411,12 +411,11 @@ body {
 }
 
 /* Boîte de légende : positionnement au centre en bas */
-.carousel-caption,
-.caption-box {
+.carousel-caption {
     position: absolute !important;
-    top: 50% !important;  /* Change bottom to top */
+    top: 50% !important;
     left: 50% !important;
-    transform: translate(-50%, -50%) !important; /* Add Y-axis transform */
+    transform: translate(-50%, -50%) !important;
     width: fit-content !important;
     min-width: min(200px, 90%) !important;
     max-width: 90% !important;
@@ -431,8 +430,7 @@ body {
     overflow: hidden !important;
 }
 
-.carousel-caption h2,
-.caption-box h2 {
+.carousel-caption h2 {
     color: white !important;
     margin: 0 auto !important;
     font-size: clamp(1rem, 4vw, 1.8rem) !important;
@@ -442,7 +440,6 @@ body {
     word-break: break-word !important;
     overflow-wrap: break-word !important;
 }
-
 /* Also update the carousel container */
 .carousel-inner {
     width: 100% !important;
@@ -468,7 +465,7 @@ body {
         max-width: 95% !important;
     }
 }
-/* .caption-box {
+.caption-box {
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     padding: 15px 30px;
@@ -482,7 +479,7 @@ body {
     margin: 0;
     font-size: 1.8rem;
     white-space: nowrap;
-} */
+}
 body {
     background-color: skyblue;
     overflow-x: hidden;
