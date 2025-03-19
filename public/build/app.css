@@ -410,50 +410,63 @@ body {
     position: relative;
 }
 
-.carousel-item {
-    height: 400px;
-    background-position: center !important;
-    background-size: cover !important;
+/* Gestion globale du carousel */
+#homeCarousel {
+    width: 100%;
+    position: relative;
 }
 
+.carousel-item {
+    height: 400px; /* Vous pouvez également utiliser une hauteur en VH pour plus de fluidité */
+    background-position: center;
+    background-size: cover;
+}
+
+/* Boîte de légende du carousel */
 .carousel-caption {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: auto;
     max-width: 90%;
+    padding: clamp(10px, 3vw, 40px);  /* padding responsive */
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
-    padding: clamp(10px, 3vw, 40px);
     border-radius: 10px;
     text-align: center;
 }
 
+/* Texte de la légende */
 .carousel-caption h2 {
     color: white;
     margin: 0;
-    font-size: clamp(1.2rem, 4vw, 1.8rem);
+    font-size: clamp(1rem, 4vw, 1.8rem);  /* taille du texte responsive */
     line-height: 1.3;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    word-break: break-word;
-    hyphens: auto;
+    white-space: normal;          /* autorise le retour à la ligne */
+    word-wrap: break-word;        /* permet de couper les mots longs */
+    overflow-wrap: break-word;
 }
 
-/* Media queries */
+/* Ajustements pour écrans moyens */
 @media (max-width: 768px) {
+    .carousel-item {
+        height: 350px;
+    }
+    .carousel-caption {
+        padding: 15px;
+        max-width: 95%;
+    }
+}
+
+/* Ajustements pour petits écrans */
+@media (max-width: 576px) {
     .carousel-item {
         height: 300px;
     }
-    
     .carousel-caption {
-        padding: 15px;
-    }
-}
-
-@media (max-width: 576px) {
-    .carousel-item {
-        height: 250px;
+        padding: 10px;
+        max-width: 95%;
     }
 }
 
