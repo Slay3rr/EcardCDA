@@ -407,12 +407,14 @@ body {
 
 .carousel-caption {
     position: absolute;
-    bottom: 80px;
+    bottom: clamp(20px, 10vh, 80px);
     left: 50%;
     transform: translateX(-50%);
+    width: auto;
+    max-width: 90%;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
-    padding: 20px 40px;
+    padding: clamp(15px, 3vw, 40px);
     border-radius: 10px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -420,11 +422,20 @@ body {
 .carousel-caption h2 {
     color: white;
     margin: 0;
-    font-size: 1.8rem;
+    font-size: clamp(1.2rem, 3vw, 1.8rem);
+    line-height: 1.2;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    position: relative;
+    white-space: normal;
 }
-
+@media (max-width: 768px) {
+    .carousel-inner {
+        width: 100%;
+    }
+    
+    .carousel-caption {
+        padding: clamp(10px, 2vw, 20px);
+    }
+}
 /* Effet de soulignement animé */
 .carousel-caption h2::after {
     content: '';
