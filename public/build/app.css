@@ -416,60 +416,57 @@ body {
     position: relative;
 }
 
+/* Carousel item - garde la hauteur relative */
+/* Carousel item – hauteur gérée en CSS */
 .carousel-item {
-    height: 400px; /* Vous pouvez également utiliser une hauteur en VH pour plus de fluidité */
+    height: 400px; /* Vous pouvez ajuster ou utiliser des unités relatives (vh) */
     background-position: center;
     background-size: cover;
 }
 
-/* Boîte de légende du carousel */
+/* Boîte de légende (caption) */
 .carousel-caption {
     position: absolute;
-    top: 50%;
+    top: 50%; 
     left: 50%;
     transform: translate(-50%, -50%);
-    max-width: 90%;
-    padding: clamp(10px, 3vw, 40px);  /* padding responsive */
+    width: 90%;            /* Largeur relative */
+    max-width: 90%;        /* Limite la largeur pour éviter les débordements */
+    box-sizing: border-box; /* Inclut le padding dans la largeur */
+    padding: clamp(10px, 2vw, 20px);  /* Padding fluide en fonction de l'écran */
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     border-radius: 10px;
     text-align: center;
+    overflow: hidden;      /* Empêche le contenu de déborder */
 }
 
 /* Texte de la légende */
 .carousel-caption h2 {
     color: white;
     margin: 0;
-    font-size: clamp(1rem, 4vw, 1.8rem);  /* taille du texte responsive */
-    line-height: 1.3;
+    /* Utilisation de clamp pour un redimensionnement fluide, avec une taille max raisonnable */
+    font-size: clamp(0.8rem, 4vw, 1.2rem);
+    line-height: 1.2;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-    white-space: normal;          /* autorise le retour à la ligne */
-    word-wrap: break-word;        /* permet de couper les mots longs */
+    white-space: normal;   /* Permet le retour à la ligne */
+    word-break: break-word;/* Coupe les mots trop longs */
     overflow-wrap: break-word;
 }
 
-/* Ajustements pour écrans moyens */
-@media (max-width: 768px) {
-    .carousel-item {
-        height: 350px;
-    }
-    .carousel-caption {
-        padding: 15px;
-        max-width: 95%;
-    }
-}
-
-/* Ajustements pour petits écrans */
+/* Ajustements pour petits écrans (ex: smartphones) */
 @media (max-width: 576px) {
     .carousel-item {
-        height: 300px;
+        height: 280px;    /* Réduction de la hauteur du carousel */
     }
     .carousel-caption {
-        padding: 10px;
+        padding: clamp(6px, 2vw, 15px);
         max-width: 95%;
     }
+    .carousel-caption h2 {
+        font-size: clamp(0.7rem, 5vw, 1rem);
+    }
 }
-
 .caption-box {
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
