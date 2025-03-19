@@ -423,14 +423,15 @@ body {
     overflow-wrap: break-word !important;
 }
 
-/* Boîte de légende : s'assurer qu'elle ne déborde pas */
+/* Boîte de légende : positionnement en bas au centre */
 .carousel-caption,
 .caption-box {
     position: absolute !important;
-    top: 50% !important;
+    bottom: 50px !important; /* Position depuis le bas au lieu de top */
     left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 90% !important;
+    transform: translateX(-50%) !important; /* Uniquement translation horizontale */
+    width: auto !important; /* Largeur automatique basée sur le contenu */
+    min-width: 200px !important;
     max-width: 90% !important;
     box-sizing: border-box !important;
     padding: clamp(10px, 2vw, 20px) !important;
@@ -441,16 +442,20 @@ body {
     overflow: hidden !important;
 }
 
-/* Pour très petits écrans (ex : iPhone SE) */
+/* Ajustement pour les petits écrans */
+@media (max-width: 768px) {
+    .carousel-caption,
+    .caption-box {
+        bottom: 30px !important;
+    }
+}
+
 @media (max-width: 375px) {
     .carousel-caption,
     .caption-box {
+        bottom: 20px !important;
         padding: clamp(6px, 2vw, 15px) !important;
         max-width: 95% !important;
-    }
-    .carousel-caption h2,
-    .caption-box h2 {
-        font-size: clamp(0.8rem, 5vw, 1rem) !important;
     }
 }
 .caption-box {
